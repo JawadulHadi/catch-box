@@ -23,6 +23,8 @@ export const Route = createFileRoute("/_authenticated/connect")({
         property: "og:description",
         content: "Copy your personal key and one snippet into your script.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: ConnectPage,

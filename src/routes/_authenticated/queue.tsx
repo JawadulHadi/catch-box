@@ -23,6 +23,8 @@ export const Route = createFileRoute("/_authenticated/queue")({
         property: "og:description",
         content: "Every scrape that got stuck, newest first, with a one-line reason why.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: QueuePage,

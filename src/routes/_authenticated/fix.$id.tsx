@@ -33,6 +33,8 @@ export const Route = createFileRoute("/_authenticated/fix/$id")({
         property: "og:description",
         content: "See what the scraper tried to get and fill in the missing piece.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: FixPage,

@@ -22,6 +22,8 @@ export const Route = createFileRoute("/_authenticated/scrapers")({
         property: "og:description",
         content: "The sites you're watching and how often each one runs into trouble.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: ScrapersPage,

@@ -33,6 +33,8 @@ export const Route = createFileRoute("/_authenticated/data")({
         property: "og:description",
         content: "Everything that's been checked by a person and is safe to use.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: DataPage,

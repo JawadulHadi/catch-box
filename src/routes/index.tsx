@@ -21,6 +21,8 @@ export const Route = createFileRoute("/")({
         content:
           "Failed scrapes land in an inbox, get fixed in seconds, and only then become usable data.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Landing,
