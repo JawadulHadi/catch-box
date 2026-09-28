@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedBuilderRouteImport } from './routes/_authenticated/builder'
 import { Route as AuthenticatedConnectRouteImport } from './routes/_authenticated/connect'
 import { Route as AuthenticatedDataRouteImport } from './routes/_authenticated/data'
+import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
 import { Route as AuthenticatedQueueRouteImport } from './routes/_authenticated/queue'
 import { Route as AuthenticatedScrapersRouteImport } from './routes/_authenticated/scrapers'
 import { Route as AuthenticatedStatusRouteImport } from './routes/_authenticated/status'
@@ -49,6 +50,11 @@ const AuthenticatedConnectRoute = AuthenticatedConnectRouteImport.update({
 const AuthenticatedDataRoute = AuthenticatedDataRouteImport.update({
   id: '/data',
   path: '/data',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedHistoryRoute = AuthenticatedHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedQueueRoute = AuthenticatedQueueRouteImport.update({
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/builder': typeof AuthenticatedBuilderRoute
   '/connect': typeof AuthenticatedConnectRoute
   '/data': typeof AuthenticatedDataRoute
+  '/history': typeof AuthenticatedHistoryRoute
   '/queue': typeof AuthenticatedQueueRoute
   '/scrapers': typeof AuthenticatedScrapersRoute
   '/status': typeof AuthenticatedStatusRoute
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/builder': typeof AuthenticatedBuilderRoute
   '/connect': typeof AuthenticatedConnectRoute
   '/data': typeof AuthenticatedDataRoute
+  '/history': typeof AuthenticatedHistoryRoute
   '/queue': typeof AuthenticatedQueueRoute
   '/scrapers': typeof AuthenticatedScrapersRoute
   '/status': typeof AuthenticatedStatusRoute
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/_authenticated/builder': typeof AuthenticatedBuilderRoute
   '/_authenticated/connect': typeof AuthenticatedConnectRoute
   '/_authenticated/data': typeof AuthenticatedDataRoute
+  '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/queue': typeof AuthenticatedQueueRoute
   '/_authenticated/scrapers': typeof AuthenticatedScrapersRoute
   '/_authenticated/status': typeof AuthenticatedStatusRoute
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
     | '/builder'
     | '/connect'
     | '/data'
+    | '/history'
     | '/queue'
     | '/scrapers'
     | '/status'
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
     | '/builder'
     | '/connect'
     | '/data'
+    | '/history'
     | '/queue'
     | '/scrapers'
     | '/status'
@@ -158,6 +169,7 @@ export interface FileRouteTypes {
     | '/_authenticated/builder'
     | '/_authenticated/connect'
     | '/_authenticated/data'
+    | '/_authenticated/history'
     | '/_authenticated/queue'
     | '/_authenticated/scrapers'
     | '/_authenticated/status'
@@ -218,6 +230,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDataRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/history': {
+      id: '/_authenticated/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof AuthenticatedHistoryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/queue': {
       id: '/_authenticated/queue'
       path: '/queue'
@@ -267,6 +286,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBuilderRoute: typeof AuthenticatedBuilderRoute
   AuthenticatedConnectRoute: typeof AuthenticatedConnectRoute
   AuthenticatedDataRoute: typeof AuthenticatedDataRoute
+  AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedQueueRoute: typeof AuthenticatedQueueRoute
   AuthenticatedScrapersRoute: typeof AuthenticatedScrapersRoute
   AuthenticatedStatusRoute: typeof AuthenticatedStatusRoute
@@ -277,6 +297,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBuilderRoute: AuthenticatedBuilderRoute,
   AuthenticatedConnectRoute: AuthenticatedConnectRoute,
   AuthenticatedDataRoute: AuthenticatedDataRoute,
+  AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedQueueRoute: AuthenticatedQueueRoute,
   AuthenticatedScrapersRoute: AuthenticatedScrapersRoute,
   AuthenticatedStatusRoute: AuthenticatedStatusRoute,
