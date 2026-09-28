@@ -4,7 +4,7 @@
 
 The design system exports these components — import them from `@ws-dd22e65cc6700b88943b/c4381d79-f48e-441b-be8a-8791ccc5f1fb` and compose them before building anything from scratch:
 
-`AppShell`, `Badge`, `Button`, `CardContent`, `CardDescription`, `CardFooter`, `CardHeader`, `CardTitle`, `Card`, `CatchboxMark`, `Constants`, `ReasonBadge`, `SheetsConnect`
+`AppShell`, `Badge`, `Button`, `CardContent`, `CardDescription`, `CardFooter`, `CardHeader`, `CardTitle`, `Card`, `CatchboxMark`, `Constants`, `ReasonBadge`, `SheetsConnect`, `ThemeToggle`
 
 Per-component details (import stanzas, props, variants, examples) live in `.lovable/rules/libraries/{slug}/components.md` — on disk, not auto-loaded. Read that file or the component source when the name alone isn't enough.
 

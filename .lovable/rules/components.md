@@ -103,3 +103,9 @@ import { ReasonBadge } from "@ws-dd22e65cc6700b88943b/c4381d79-f48e-441b-be8a-87
 import { SheetsConnect } from "@ws-dd22e65cc6700b88943b/c4381d79-f48e-441b-be8a-8791ccc5f1fb"
 ```
 
+### ThemeToggle
+
+```ts
+import { ThemeToggle } from "@ws-dd22e65cc6700b88943b/c4381d79-f48e-441b-be8a-8791ccc5f1fb"
+```
+
