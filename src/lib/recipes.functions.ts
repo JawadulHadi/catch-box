@@ -66,6 +66,14 @@ export const runRecipe = createServerFn({ method: "POST" })
     if (error || !recipe) throw new Error("We couldn't find that scraper.");
     const fields = z.array(fieldSchema).parse(recipe.fields);
     const now = new Date().toISOString();
+    const startedAt = Date.now();
+    const logRun = (outcome: "approved" | "caught") =>
+      context.supabase.from("scraper_runs").insert({
+        owner_id: context.userId,
+        site: recipe.site,
+        outcome,
+        duration_ms: Date.now() - startedAt,
+      });
 
     const got: Record<string, string | null> = {};
     let reason: "blocked" | "page_changed" | "missing_info" | null = null;
@@ -116,6 +124,7 @@ export const runRecipe = createServerFn({ method: "POST" })
       await context.supabase.from("scraper_jobs").update({ last_run_at: now, last_success_at: now })
         .eq("owner_id", context.userId).eq("site", recipe.site);
       await context.supabase.from("scraper_recipes").update({ last_run_at: now, last_result: "approved" }).eq("id", recipe.id);
+      await logRun("approved");
       await syncSheetForUser(context.userId).catch(() => null);
       return { outcome: "approved", message: "Every field was found, so it went straight to Approved data." };
     }
@@ -140,5 +149,6 @@ export const runRecipe = createServerFn({ method: "POST" })
       .update({ last_run_at: now, last_failure_at: now, failure_count: (job?.failure_count ?? 0) + 1 })
       .eq("owner_id", context.userId).eq("site", recipe.site);
     await context.supabase.from("scraper_recipes").update({ last_run_at: now, last_result: "caught" }).eq("id", recipe.id);
+    await logRun("caught");
     return { outcome: "caught", message: trace ?? "Something needs a quick look.", catchId: caught.id };
   });

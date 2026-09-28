@@ -236,6 +236,33 @@ export type Database = {
         }
         Relationships: []
       }
+      scraper_runs: {
+        Row: {
+          duration_ms: number | null
+          id: string
+          outcome: string
+          owner_id: string
+          ran_at: string
+          site: string
+        }
+        Insert: {
+          duration_ms?: number | null
+          id?: string
+          outcome: string
+          owner_id?: string
+          ran_at?: string
+          site: string
+        }
+        Update: {
+          duration_ms?: number | null
+          id?: string
+          outcome?: string
+          owner_id?: string
+          ran_at?: string
+          site?: string
+        }
+        Relationships: []
+      }
       sheet_exports: {
         Row: {
           created_at: string
