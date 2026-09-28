@@ -66,7 +66,6 @@ The endpoint works out who the failure belongs to from the key alone — a calle
 ```
 src/
   design-system/catchbox/ reusable themes, fonts, and controls
-  assets/fonts/       bundled Catchbox typefaces
   components/         Catchbox app-only UI (navigation and data views)
   lib/
     catchbox-service.ts   all database reads and writes
