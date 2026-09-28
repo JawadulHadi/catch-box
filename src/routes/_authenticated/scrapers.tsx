@@ -2,10 +2,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 
 import { AppShell } from "@/components/app-shell";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card } from "@/design-system/catchbox/components/card";
+import { Button } from "@/design-system/catchbox/components/button";
+import { Badge } from "@/design-system/catchbox/components/badge";
+import { Skeleton } from "@/design-system/catchbox/components/skeleton";
 import { fetchRecentAlerts, fetchScrapers } from "@/lib/catchbox-service";
 import { timeAgo } from "@/lib/format";
 
@@ -22,6 +22,8 @@ export const Route = createFileRoute("/_authenticated/scrapers")({
         property: "og:description",
         content: "The sites you're watching and how often each one runs into trouble.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: ScrapersPage,

@@ -2,11 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 
 import { AppShell } from "@/components/app-shell";
-import { Card } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card } from "@/design-system/catchbox/components/card";
+import { Skeleton } from "@/design-system/catchbox/components/skeleton";
 import { fetchScraperHistory, type RunPoint } from "@/lib/catchbox-service";
 import { formatDate } from "@/lib/format";
-import { cn } from "@/lib/utils";
+import { cn } from "@/design-system/catchbox/lib/utils";
 
 const description = "How each scraper has done over the last 30 days: every run, how often it worked, and what reached your sheet.";
 

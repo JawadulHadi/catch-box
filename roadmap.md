@@ -8,3 +8,4 @@
 - [x] No-code scraper builder with "Run now" (clean runs → approved + sheet, failures → inbox)
 - [ ] Email delivery of scraper alerts — waiting on the owner setting up their email domain
 - [ ] Connect the owner's own scraper script — needs the owner to run the snippet on their machine
+- [x] Reusable Catchbox light/dark design system and theme showcase

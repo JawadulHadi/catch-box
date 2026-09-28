@@ -7,12 +7,12 @@ import { useServerFn } from "@tanstack/react-start";
 
 import { AppShell } from "@/components/app-shell";
 import { ReasonBadge } from "@/components/reason-badge";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Textarea } from "@/components/ui/textarea";
+import { Card } from "@/design-system/catchbox/components/card";
+import { Button } from "@/design-system/catchbox/components/button";
+import { Input } from "@/design-system/catchbox/components/input";
+import { Label } from "@/design-system/catchbox/components/label";
+import { Skeleton } from "@/design-system/catchbox/components/skeleton";
+import { Textarea } from "@/design-system/catchbox/components/textarea";
 import { approveCatch, discardCatch, fetchCatch } from "@/lib/catchbox-service";
 import { timeAgo } from "@/lib/format";
 import { suggestFieldValues } from "@/lib/suggest.functions";
@@ -33,6 +33,8 @@ export const Route = createFileRoute("/_authenticated/fix/$id")({
         property: "og:description",
         content: "See what the scraper tried to get and fill in the missing piece.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: FixPage,

@@ -4,9 +4,9 @@ import { toast } from "sonner";
 
 import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { CatchboxMark } from "@/components/catchbox-mark";
+import { Button } from "@/design-system/catchbox/components/button";
+import { Card } from "@/design-system/catchbox/components/card";
+import { CatchboxMark } from "@/design-system/catchbox/components/catchbox-mark";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,
@@ -19,6 +19,8 @@ export const Route = createFileRoute("/auth")({
       },
       { property: "og:title", content: "Sign in — Catchbox" },
       { property: "og:description", content: "Sign in to Catchbox with your Google account." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: AuthPage,

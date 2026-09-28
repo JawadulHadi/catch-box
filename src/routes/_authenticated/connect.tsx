@@ -5,9 +5,9 @@ import { Check, Copy, Eye, EyeOff, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 
 import { AppShell } from "@/components/app-shell";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card } from "@/design-system/catchbox/components/card";
+import { Button } from "@/design-system/catchbox/components/button";
+import { Skeleton } from "@/design-system/catchbox/components/skeleton";
 import { fetchIngestKey, rotateIngestKey } from "@/lib/catchbox-service";
 
 export const Route = createFileRoute("/_authenticated/connect")({
@@ -23,6 +23,8 @@ export const Route = createFileRoute("/_authenticated/connect")({
         property: "og:description",
         content: "Copy your personal key and one snippet into your script.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: ConnectPage,

@@ -4,9 +4,9 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { PanelLeft } from "lucide-react";
 
 import { useIsMobile } from "@/hooks/use-mobile";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { cn } from "@/design-system/catchbox/lib/utils";
+import { Button } from "@/design-system/catchbox/components/button";
+import { Input } from "@/design-system/catchbox/components/input";
 import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
@@ -15,7 +15,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/design-system/catchbox/components/skeleton";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";

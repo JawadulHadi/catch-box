@@ -1,8 +1,35 @@
-export { AppShell } from "./components/app-shell"
-export { CatchboxMark } from "./components/catchbox-mark"
-export { ReasonBadge } from "./components/reason-badge"
-export { SheetsConnect } from "./components/sheets-connect"
-export { Badge } from "./components/ui/badge"
-export { Button } from "./components/ui/button"
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from "./components/ui/card"
-export { Constants } from "./integrations/supabase/types"
+export { Button, buttonVariants } from "./design-system/catchbox/components/button";
+export type { ButtonProps } from "./design-system/catchbox/components/button";
+export { Badge, badgeVariants } from "./design-system/catchbox/components/badge";
+export type { BadgeProps } from "./design-system/catchbox/components/badge";
+export {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "./design-system/catchbox/components/card";
+export { Alert, AlertTitle, AlertDescription } from "./design-system/catchbox/components/alert";
+export { Input } from "./design-system/catchbox/components/input";
+export type { InputProps } from "./design-system/catchbox/components/input";
+export { Textarea } from "./design-system/catchbox/components/textarea";
+export type { TextareaProps } from "./design-system/catchbox/components/textarea";
+export { Label } from "./design-system/catchbox/components/label";
+export type { LabelProps } from "./design-system/catchbox/components/label";
+export { Tabs, TabsList, TabsTrigger, TabsContent } from "./design-system/catchbox/components/tabs";
+export { Checkbox } from "./design-system/catchbox/components/checkbox";
+export type { CheckboxProps } from "./design-system/catchbox/components/checkbox";
+export { Switch } from "./design-system/catchbox/components/switch";
+export type { SwitchProps } from "./design-system/catchbox/components/switch";
+export { Progress } from "./design-system/catchbox/components/progress";
+export type { ProgressProps } from "./design-system/catchbox/components/progress";
+export { Skeleton } from "./design-system/catchbox/components/skeleton";
+export type { SkeletonProps } from "./design-system/catchbox/components/skeleton";
+export { CatchboxMark } from "./design-system/catchbox/components/catchbox-mark";
+export type { CatchboxMarkProps } from "./design-system/catchbox/components/catchbox-mark";
+export { ThemeToggle } from "./design-system/catchbox/components/theme-toggle";
+export type { ThemeToggleProps } from "./design-system/catchbox/components/theme-toggle";
+export { useThemeStore, useThemeSync } from "./design-system/catchbox/hooks/use-theme";
+export type { Theme } from "./design-system/catchbox/hooks/use-theme";
+export { cn } from "./design-system/catchbox/lib/utils";

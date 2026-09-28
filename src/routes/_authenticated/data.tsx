@@ -4,10 +4,10 @@ import { useMemo, useState } from "react";
 import { Download, Search } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card } from "@/design-system/catchbox/components/card";
+import { Button } from "@/design-system/catchbox/components/button";
+import { Input } from "@/design-system/catchbox/components/input";
+import { Skeleton } from "@/design-system/catchbox/components/skeleton";
 import {
   Table,
   TableBody,
@@ -33,6 +33,8 @@ export const Route = createFileRoute("/_authenticated/data")({
         property: "og:description",
         content: "Everything that's been checked by a person and is safe to use.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: DataPage,

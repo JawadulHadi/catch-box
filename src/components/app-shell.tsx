@@ -1,12 +1,12 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { Inbox, Database, Radar, Plug, LogOut, Activity, Wrench, BarChart3, Palette } from "lucide-react";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemeToggle } from "@/design-system/catchbox/components/theme-toggle";
 import type { ReactNode } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { CatchboxMark } from "@/components/catchbox-mark";
+import { Button } from "@/design-system/catchbox/components/button";
+import { CatchboxMark } from "@/design-system/catchbox/components/catchbox-mark";
 
 const navItems = [
   { to: "/queue", label: "Needs a quick look", icon: Inbox },

@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Check, Inbox, ShieldCheck, Wrench } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { CatchboxMark } from "@/components/catchbox-mark";
+import { Button } from "@/design-system/catchbox/components/button";
+import { Card } from "@/design-system/catchbox/components/card";
+import { Badge } from "@/design-system/catchbox/components/badge";
+import { CatchboxMark } from "@/design-system/catchbox/components/catchbox-mark";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -21,6 +21,8 @@ export const Route = createFileRoute("/")({
         content:
           "Failed scrapes land in an inbox, get fixed in seconds, and only then become usable data.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Landing,
