@@ -65,7 +65,9 @@ The endpoint works out who the failure belongs to from the key alone — a calle
 
 ```
 src/
-  components/         shared UI (app shell, badges, mark)
+  design-system/catchbox/ reusable themes, fonts, and controls
+  assets/fonts/       bundled Catchbox typefaces
+  components/         Catchbox app-only UI (navigation and data views)
   lib/
     catchbox-service.ts   all database reads and writes
     format.ts             dates, relative times, CSV helpers
@@ -75,3 +77,7 @@ src/
     _authenticated/       the signed-in screens
     api/public/triage/    the endpoint your scraper posts to
 ```
+
+## Catchbox design system
+
+The reusable light and dark themes, semantic colors, typography, and controls live in `src/design-system/catchbox/`. The app's `src/styles.css` imports its theme entry so this app also verifies the same styles attached projects receive. To use it in another Lovable project, attach this design-system project using **Use this design system** in the project menu, then import `@/design-system/catchbox/styles.css` once in that project's stylesheet and import controls from `@/design-system/catchbox`. Mount `useThemeSync()` in a client-rendered root to restore the saved appearance, and render `ThemeToggle` wherever people can switch themes. Open `/showcase` to compare the controls in both appearances.

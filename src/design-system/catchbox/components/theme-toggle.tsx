@@ -24,8 +24,8 @@ export const ThemeToggle = React.forwardRef<HTMLButtonElement, ThemeToggleProps>
           setTheme(next);
           onClick?.(event);
         }}
-        aria-label={`Switch to ${next} theme`}
         {...props}
+        aria-label={props["aria-label"] ?? `Switch to ${next} theme`}
       >
         {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
         {theme === "dark" ? "Light theme" : "Dark theme"}
