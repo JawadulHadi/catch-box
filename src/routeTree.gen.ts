@@ -12,9 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedConnectRouteImport } from './routes/_authenticated/connect'
 import { Route as AuthenticatedDataRouteImport } from './routes/_authenticated/data'
 import { Route as AuthenticatedQueueRouteImport } from './routes/_authenticated/queue'
+import { Route as AuthenticatedScrapersRouteImport } from './routes/_authenticated/scrapers'
 import { Route as AuthenticatedFixIdRouteImport } from './routes/_authenticated/fix.$id'
+import { Route as ApiPublicTriageIngestRouteImport } from './routes/api/public/triage/ingest'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -30,6 +33,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedConnectRoute = AuthenticatedConnectRouteImport.update({
+  id: '/connect',
+  path: '/connect',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDataRoute = AuthenticatedDataRouteImport.update({
   id: '/data',
   path: '/data',
@@ -40,54 +48,93 @@ const AuthenticatedQueueRoute = AuthenticatedQueueRouteImport.update({
   path: '/queue',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedScrapersRoute = AuthenticatedScrapersRouteImport.update({
+  id: '/scrapers',
+  path: '/scrapers',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedFixIdRoute = AuthenticatedFixIdRouteImport.update({
   id: '/fix/$id',
   path: '/fix/$id',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicTriageIngestRoute = ApiPublicTriageIngestRouteImport.update({
+  id: '/api/public/triage/ingest',
+  path: '/api/public/triage/ingest',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/connect': typeof AuthenticatedConnectRoute
   '/data': typeof AuthenticatedDataRoute
   '/queue': typeof AuthenticatedQueueRoute
+  '/scrapers': typeof AuthenticatedScrapersRoute
   '/fix/$id': typeof AuthenticatedFixIdRoute
+  '/api/public/triage/ingest': typeof ApiPublicTriageIngestRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/connect': typeof AuthenticatedConnectRoute
   '/data': typeof AuthenticatedDataRoute
   '/queue': typeof AuthenticatedQueueRoute
+  '/scrapers': typeof AuthenticatedScrapersRoute
   '/fix/$id': typeof AuthenticatedFixIdRoute
+  '/api/public/triage/ingest': typeof ApiPublicTriageIngestRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/connect': typeof AuthenticatedConnectRoute
   '/_authenticated/data': typeof AuthenticatedDataRoute
   '/_authenticated/queue': typeof AuthenticatedQueueRoute
+  '/_authenticated/scrapers': typeof AuthenticatedScrapersRoute
   '/_authenticated/fix/$id': typeof AuthenticatedFixIdRoute
+  '/api/public/triage/ingest': typeof ApiPublicTriageIngestRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/data' | '/queue' | '/fix/$id'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/connect'
+    | '/data'
+    | '/queue'
+    | '/scrapers'
+    | '/fix/$id'
+    | '/api/public/triage/ingest'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/data' | '/queue' | '/fix/$id'
+  to:
+    | '/'
+    | '/auth'
+    | '/connect'
+    | '/data'
+    | '/queue'
+    | '/scrapers'
+    | '/fix/$id'
+    | '/api/public/triage/ingest'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/connect'
     | '/_authenticated/data'
     | '/_authenticated/queue'
+    | '/_authenticated/scrapers'
     | '/_authenticated/fix/$id'
+    | '/api/public/triage/ingest'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiPublicTriageIngestRoute: typeof ApiPublicTriageIngestRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -113,6 +160,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/connect': {
+      id: '/_authenticated/connect'
+      path: '/connect'
+      fullPath: '/connect'
+      preLoaderRoute: typeof AuthenticatedConnectRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/data': {
       id: '/_authenticated/data'
       path: '/data'
@@ -127,6 +181,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedQueueRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/scrapers': {
+      id: '/_authenticated/scrapers'
+      path: '/scrapers'
+      fullPath: '/scrapers'
+      preLoaderRoute: typeof AuthenticatedScrapersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/fix/$id': {
       id: '/_authenticated/fix/$id'
       path: '/fix/$id'
@@ -134,18 +195,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFixIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/triage/ingest': {
+      id: '/api/public/triage/ingest'
+      path: '/api/public/triage/ingest'
+      fullPath: '/api/public/triage/ingest'
+      preLoaderRoute: typeof ApiPublicTriageIngestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedConnectRoute: typeof AuthenticatedConnectRoute
   AuthenticatedDataRoute: typeof AuthenticatedDataRoute
   AuthenticatedQueueRoute: typeof AuthenticatedQueueRoute
+  AuthenticatedScrapersRoute: typeof AuthenticatedScrapersRoute
   AuthenticatedFixIdRoute: typeof AuthenticatedFixIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedConnectRoute: AuthenticatedConnectRoute,
   AuthenticatedDataRoute: AuthenticatedDataRoute,
   AuthenticatedQueueRoute: AuthenticatedQueueRoute,
+  AuthenticatedScrapersRoute: AuthenticatedScrapersRoute,
   AuthenticatedFixIdRoute: AuthenticatedFixIdRoute,
 }
 
@@ -156,6 +228,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiPublicTriageIngestRoute: ApiPublicTriageIngestRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
