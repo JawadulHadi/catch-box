@@ -12,10 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedBuilderRouteImport } from './routes/_authenticated/builder'
 import { Route as AuthenticatedConnectRouteImport } from './routes/_authenticated/connect'
 import { Route as AuthenticatedDataRouteImport } from './routes/_authenticated/data'
 import { Route as AuthenticatedQueueRouteImport } from './routes/_authenticated/queue'
 import { Route as AuthenticatedScrapersRouteImport } from './routes/_authenticated/scrapers'
+import { Route as AuthenticatedStatusRouteImport } from './routes/_authenticated/status'
 import { Route as AuthenticatedFixIdRouteImport } from './routes/_authenticated/fix.$id'
 import { Route as OauthGoogleSheetsReturnRouteImport } from './routes/oauth/google-sheets/return'
 import { Route as ApiPublicTriageIngestRouteImport } from './routes/api/public/triage/ingest'
@@ -33,6 +35,11 @@ const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedBuilderRoute = AuthenticatedBuilderRouteImport.update({
+  id: '/builder',
+  path: '/builder',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedConnectRoute = AuthenticatedConnectRouteImport.update({
   id: '/connect',
@@ -54,6 +61,11 @@ const AuthenticatedScrapersRoute = AuthenticatedScrapersRouteImport.update({
   path: '/scrapers',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedStatusRoute = AuthenticatedStatusRouteImport.update({
+  id: '/status',
+  path: '/status',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedFixIdRoute = AuthenticatedFixIdRouteImport.update({
   id: '/fix/$id',
   path: '/fix/$id',
@@ -73,10 +85,12 @@ const ApiPublicTriageIngestRoute = ApiPublicTriageIngestRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/builder': typeof AuthenticatedBuilderRoute
   '/connect': typeof AuthenticatedConnectRoute
   '/data': typeof AuthenticatedDataRoute
   '/queue': typeof AuthenticatedQueueRoute
   '/scrapers': typeof AuthenticatedScrapersRoute
+  '/status': typeof AuthenticatedStatusRoute
   '/fix/$id': typeof AuthenticatedFixIdRoute
   '/oauth/google-sheets/return': typeof OauthGoogleSheetsReturnRoute
   '/api/public/triage/ingest': typeof ApiPublicTriageIngestRoute
@@ -84,10 +98,12 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/builder': typeof AuthenticatedBuilderRoute
   '/connect': typeof AuthenticatedConnectRoute
   '/data': typeof AuthenticatedDataRoute
   '/queue': typeof AuthenticatedQueueRoute
   '/scrapers': typeof AuthenticatedScrapersRoute
+  '/status': typeof AuthenticatedStatusRoute
   '/fix/$id': typeof AuthenticatedFixIdRoute
   '/oauth/google-sheets/return': typeof OauthGoogleSheetsReturnRoute
   '/api/public/triage/ingest': typeof ApiPublicTriageIngestRoute
@@ -97,10 +113,12 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/builder': typeof AuthenticatedBuilderRoute
   '/_authenticated/connect': typeof AuthenticatedConnectRoute
   '/_authenticated/data': typeof AuthenticatedDataRoute
   '/_authenticated/queue': typeof AuthenticatedQueueRoute
   '/_authenticated/scrapers': typeof AuthenticatedScrapersRoute
+  '/_authenticated/status': typeof AuthenticatedStatusRoute
   '/_authenticated/fix/$id': typeof AuthenticatedFixIdRoute
   '/oauth/google-sheets/return': typeof OauthGoogleSheetsReturnRoute
   '/api/public/triage/ingest': typeof ApiPublicTriageIngestRoute
@@ -110,10 +128,12 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/builder'
     | '/connect'
     | '/data'
     | '/queue'
     | '/scrapers'
+    | '/status'
     | '/fix/$id'
     | '/oauth/google-sheets/return'
     | '/api/public/triage/ingest'
@@ -121,10 +141,12 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/builder'
     | '/connect'
     | '/data'
     | '/queue'
     | '/scrapers'
+    | '/status'
     | '/fix/$id'
     | '/oauth/google-sheets/return'
     | '/api/public/triage/ingest'
@@ -133,10 +155,12 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/builder'
     | '/_authenticated/connect'
     | '/_authenticated/data'
     | '/_authenticated/queue'
     | '/_authenticated/scrapers'
+    | '/_authenticated/status'
     | '/_authenticated/fix/$id'
     | '/oauth/google-sheets/return'
     | '/api/public/triage/ingest'
@@ -173,6 +197,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/builder': {
+      id: '/_authenticated/builder'
+      path: '/builder'
+      fullPath: '/builder'
+      preLoaderRoute: typeof AuthenticatedBuilderRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/connect': {
       id: '/_authenticated/connect'
       path: '/connect'
@@ -201,6 +232,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedScrapersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/status': {
+      id: '/_authenticated/status'
+      path: '/status'
+      fullPath: '/status'
+      preLoaderRoute: typeof AuthenticatedStatusRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/fix/$id': {
       id: '/_authenticated/fix/$id'
       path: '/fix/$id'
@@ -226,18 +264,22 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedBuilderRoute: typeof AuthenticatedBuilderRoute
   AuthenticatedConnectRoute: typeof AuthenticatedConnectRoute
   AuthenticatedDataRoute: typeof AuthenticatedDataRoute
   AuthenticatedQueueRoute: typeof AuthenticatedQueueRoute
   AuthenticatedScrapersRoute: typeof AuthenticatedScrapersRoute
+  AuthenticatedStatusRoute: typeof AuthenticatedStatusRoute
   AuthenticatedFixIdRoute: typeof AuthenticatedFixIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedBuilderRoute: AuthenticatedBuilderRoute,
   AuthenticatedConnectRoute: AuthenticatedConnectRoute,
   AuthenticatedDataRoute: AuthenticatedDataRoute,
   AuthenticatedQueueRoute: AuthenticatedQueueRoute,
   AuthenticatedScrapersRoute: AuthenticatedScrapersRoute,
+  AuthenticatedStatusRoute: AuthenticatedStatusRoute,
   AuthenticatedFixIdRoute: AuthenticatedFixIdRoute,
 }
 
