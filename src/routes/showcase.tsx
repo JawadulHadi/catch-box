@@ -16,7 +16,7 @@ import { Skeleton } from "@/design-system/catchbox/components/skeleton";
 import { Switch } from "@/design-system/catchbox/components/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/design-system/catchbox/components/tabs";
 import { Textarea } from "@/design-system/catchbox/components/textarea";
-import { cn } from "@/lib/utils";
+import { cn } from "@/design-system/catchbox/lib/utils";
 
 const description = "Every color, font and building block Catchbox uses, in both the dark and light themes.";
 

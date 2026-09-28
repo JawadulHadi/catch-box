@@ -1,6 +1,6 @@
 import { Badge } from "@/design-system/catchbox/components/badge";
 import { reasonLabels, type CatchReason } from "@/lib/catchbox-service";
-import { cn } from "@/lib/utils";
+import { cn } from "@/design-system/catchbox/lib/utils";
 
 const toneClasses: Record<CatchReason, string> = {
   page_changed: "border-warning/40 bg-warning/10 text-warning",
