@@ -173,6 +173,8 @@ export type Database = {
           failure_count: number
           id: string
           last_failure_at: string | null
+          last_run_at: string | null
+          last_success_at: string | null
           owner_id: string
           schedule: string
           site: string
@@ -182,6 +184,8 @@ export type Database = {
           failure_count?: number
           id?: string
           last_failure_at?: string | null
+          last_run_at?: string | null
+          last_success_at?: string | null
           owner_id?: string
           schedule?: string
           site: string
@@ -191,9 +195,44 @@ export type Database = {
           failure_count?: number
           id?: string
           last_failure_at?: string | null
+          last_run_at?: string | null
+          last_success_at?: string | null
           owner_id?: string
           schedule?: string
           site?: string
+        }
+        Relationships: []
+      }
+      scraper_recipes: {
+        Row: {
+          created_at: string
+          fields: Json
+          id: string
+          last_result: string | null
+          last_run_at: string | null
+          owner_id: string
+          site: string
+          start_url: string
+        }
+        Insert: {
+          created_at?: string
+          fields?: Json
+          id?: string
+          last_result?: string | null
+          last_run_at?: string | null
+          owner_id?: string
+          site: string
+          start_url: string
+        }
+        Update: {
+          created_at?: string
+          fields?: Json
+          id?: string
+          last_result?: string | null
+          last_run_at?: string | null
+          owner_id?: string
+          site?: string
+          start_url?: string
         }
         Relationships: []
       }
