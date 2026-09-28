@@ -2,7 +2,7 @@
   "meta": {
     "name": "Data Guardian",
     "package": "@ws-dd22e65cc6700b88943b/c4381d79-f48e-441b-be8a-8791ccc5f1fb",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "framework": "react",
     "css_framework": "tailwind",
     "starter_template": "custom_design_system_tailwind",
@@ -14,6 +14,7 @@
       "#enrichment": "15828142fce68372bd2c8f8cc6d6c87d177c508c6831559b19613e53be0f430a",
       ".gitignore": "6d9e901a692b46a83707c245fb03bc91",
       ".lovable/meta.yaml": "954a981e8847ec1692669dbb04ae9ae9",
+      ".lovable/plan.md": "e2f23f62d964be4aa2ab354279ecd535",
       ".lovable/plan/catchbox-a-safety-net-for-web-scrapers-2026-09-28.md": "a3b18a60e7f02726b81d51e3a08091ab",
       ".lovable/project.json": "51a90576cd97762828b128ea584e5780",
       ".lovable/sources.yaml": "ee6247f6fe77fe1387244cd3c757e6a3",
