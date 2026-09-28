@@ -6,12 +6,7 @@ const GATEWAY_URL = "https://ai.gateway.lovable.dev/v1";
 const MODEL = "openai/gpt-6-astra";
 const RUN_ID_HEADER = "X-Lovable-AIG-Run-ID";
 
-export type FieldSuggestion = {
-  field: string;
-  value: string | null;
-  evidence: string;
-  confidence: "high" | "medium" | "low";
-};
+import type { FieldSuggestion } from "./suggest-types";
 
 const suggestionSchema = z.object({
   suggestions: z.array(

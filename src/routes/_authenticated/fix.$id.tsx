@@ -16,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { approveCatch, discardCatch, fetchCatch } from "@/lib/catchbox-service";
 import { timeAgo } from "@/lib/format";
 import { suggestFieldValues } from "@/lib/suggest.functions";
-import type { FieldSuggestion } from "@/lib/suggest.server";
+import type { FieldSuggestion } from "@/lib/suggest-types";
 
 export const Route = createFileRoute("/_authenticated/fix/$id")({
   head: () => ({
