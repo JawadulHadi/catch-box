@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      app_user_connections: {
+        Row: {
+          connection_key_ciphertext: string
+          connector_id: string
+          created_at: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          connection_key_ciphertext: string
+          connector_id: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          connection_key_ciphertext?: string
+          connector_id?: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       human_triage_queue: {
         Row: {
           created_at: string
@@ -110,6 +137,36 @@ export type Database = {
         }
         Relationships: []
       }
+      scraper_alerts: {
+        Row: {
+          created_at: string
+          failures_in_window: number
+          id: string
+          owner_id: string
+          sent_at: string | null
+          site: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          failures_in_window: number
+          id?: string
+          owner_id: string
+          sent_at?: string | null
+          site: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          failures_in_window?: number
+          id?: string
+          owner_id?: string
+          sent_at?: string | null
+          site?: string
+          status?: string
+        }
+        Relationships: []
+      }
       scraper_jobs: {
         Row: {
           created_at: string
@@ -137,6 +194,33 @@ export type Database = {
           owner_id?: string
           schedule?: string
           site?: string
+        }
+        Relationships: []
+      }
+      sheet_exports: {
+        Row: {
+          created_at: string
+          last_error: string | null
+          last_synced_at: string | null
+          owner_id: string
+          spreadsheet_id: string
+          spreadsheet_url: string
+        }
+        Insert: {
+          created_at?: string
+          last_error?: string | null
+          last_synced_at?: string | null
+          owner_id: string
+          spreadsheet_id: string
+          spreadsheet_url: string
+        }
+        Update: {
+          created_at?: string
+          last_error?: string | null
+          last_synced_at?: string | null
+          owner_id?: string
+          spreadsheet_id?: string
+          spreadsheet_url?: string
         }
         Relationships: []
       }

@@ -1,8 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { ArrowLeft, Check, Trash2 } from "lucide-react";
+import { ArrowLeft, Check, Sparkles, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { useServerFn } from "@tanstack/react-start";
 
 import { AppShell } from "@/components/app-shell";
 import { ReasonBadge } from "@/components/reason-badge";
@@ -11,8 +12,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Textarea } from "@/components/ui/textarea";
 import { approveCatch, discardCatch, fetchCatch } from "@/lib/catchbox-service";
 import { timeAgo } from "@/lib/format";
+import { suggestFieldValues } from "@/lib/suggest.functions";
+import type { FieldSuggestion } from "@/lib/suggest-types";
 
 export const Route = createFileRoute("/_authenticated/fix/$id")({
   head: () => ({
@@ -43,6 +47,9 @@ function FixPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [edits, setEdits] = useState<Record<string, string>>({});
+  const [pageText, setPageText] = useState("");
+  const [suggestions, setSuggestions] = useState<Record<string, FieldSuggestion>>({});
+  const runSuggest = useServerFn(suggestFieldValues);
 
   const { data, isPending, error } = useQuery({
     queryKey: ["catch", id],
@@ -90,6 +97,27 @@ function FixPage() {
       navigate({ to: "/queue" });
     },
     onError: () => toast.error("We couldn't discard that. Please try again."),
+  });
+
+  const suggest = useMutation({
+    mutationFn: () => runSuggest({ data: { id, pageText } }),
+    onSuccess: ({ suggestions: list }) => {
+      const byField: Record<string, FieldSuggestion> = {};
+      const fills: Record<string, string> = {};
+      for (const item of list) {
+        byField[item.field] = item;
+        if (item.value !== null && valueFor(item.field).trim() === "") fills[item.field] = item.value;
+      }
+      setSuggestions(byField);
+      setEdits((current) => ({ ...current, ...fills }));
+      const filled = Object.keys(fills).length;
+      toast.success(
+        filled
+          ? `Filled in ${filled} ${filled === 1 ? "field" : "fields"}. Please check before approving.`
+          : "No new values found in what you pasted.",
+      );
+    },
+    onError: (suggestError: Error) => toast.error(suggestError.message),
   });
 
   const missingCount = fields.filter((key) => valueFor(key).trim() === "").length;
@@ -173,21 +201,61 @@ function FixPage() {
                 : `${missingCount} ${missingCount === 1 ? "field is" : "fields are"} still empty.`}
             </p>
 
+            <div className="mt-6 rounded-lg border border-border bg-surface p-4">
+              <Label htmlFor="page-text" className="flex items-center gap-2">
+                <Sparkles className="size-4 text-primary" />
+                Ask Lovable AI for help
+              </Label>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Paste any text you copied from the page. We'll suggest the missing values, show
+                where each came from, and fill them in for you to check.
+              </p>
+              <Textarea
+                id="page-text"
+                value={pageText}
+                onChange={(event) => setPageText(event.target.value)}
+                placeholder="Paste the page text here (optional)"
+                className="mt-3 min-h-24"
+              />
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-3"
+                onClick={() => suggest.mutate()}
+                disabled={suggest.isPending}
+              >
+                <Sparkles className="size-4" />
+                {suggest.isPending ? "Looking…" : "Suggest values"}
+              </Button>
+            </div>
+
             <div className="mt-6 space-y-4">
-              {fields.map((key) => (
-                <div key={key}>
-                  <Label htmlFor={`field-${key}`}>{prettyLabel(key)}</Label>
-                  <Input
-                    id={`field-${key}`}
-                    value={valueFor(key)}
-                    placeholder={`Type the ${prettyLabel(key).toLowerCase()}`}
-                    onChange={(event) =>
-                      setEdits((current) => ({ ...current, [key]: event.target.value }))
-                    }
-                    className="mt-2"
-                  />
-                </div>
-              ))}
+              {fields.map((key) => {
+                const hint = suggestions[key];
+                return (
+                  <div key={key}>
+                    <Label htmlFor={`field-${key}`}>{prettyLabel(key)}</Label>
+                    <Input
+                      id={`field-${key}`}
+                      value={valueFor(key)}
+                      placeholder={`Type the ${prettyLabel(key).toLowerCase()}`}
+                      onChange={(event) =>
+                        setEdits((current) => ({ ...current, [key]: event.target.value }))
+                      }
+                      className="mt-2"
+                    />
+                    {hint ? (
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        <span className="font-medium text-foreground">
+                          AI suggestion ({hint.confidence} confidence):
+                        </span>{" "}
+                        {hint.value === null ? "not found — " : null}
+                        <span className="italic">“{hint.evidence}”</span>
+                      </p>
+                    ) : null}
+                  </div>
+                );
+              })}
             </div>
 
             <div className="mt-8 flex flex-wrap gap-3">
