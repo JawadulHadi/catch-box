@@ -155,8 +155,7 @@ function DataPage() {
             </Table>
           </div>
           <div className="border-t border-border bg-surface px-5 py-3 text-xs text-muted-foreground">
-            {rows.length} {rows.length === 1 ? "record" : "records"} · a live Google Sheet is coming
-            soon
+            {rows.length} {rows.length === 1 ? "record" : "records"}
           </div>
         </Card>
       )}
