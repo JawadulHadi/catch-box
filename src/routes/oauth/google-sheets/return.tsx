@@ -8,6 +8,8 @@ export const Route = createFileRoute("/oauth/google-sheets/return")({
       { name: "description", content: "Finishing your Google Sheets connection." },
       { property: "og:title", content: "Connecting Google Sheets — Catchbox" },
       { property: "og:description", content: "Finishing your Google Sheets connection." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: SheetsReturn,
