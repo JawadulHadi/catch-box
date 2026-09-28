@@ -6,10 +6,10 @@ import { Plus, Trash2, Play } from "lucide-react";
 import { toast } from "sonner";
 
 import { AppShell } from "@/components/app-shell";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Card } from "@/design-system/catchbox/components/card";
+import { Button } from "@/design-system/catchbox/components/button";
+import { Input } from "@/design-system/catchbox/components/input";
+import { Label } from "@/design-system/catchbox/components/label";
 import { deleteRecipe, fetchRecipes } from "@/lib/catchbox-service";
 import { runRecipe, saveRecipe } from "@/lib/recipes.functions";
 import { timeAgo } from "@/lib/format";

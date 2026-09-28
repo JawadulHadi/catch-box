@@ -4,9 +4,9 @@ import { toast } from "sonner";
 
 import { lovable } from "@/integrations/lovable/index";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { CatchboxMark } from "@/components/catchbox-mark";
+import { Button } from "@/design-system/catchbox/components/button";
+import { Card } from "@/design-system/catchbox/components/card";
+import { CatchboxMark } from "@/design-system/catchbox/components/catchbox-mark";
 
 export const Route = createFileRoute("/auth")({
   ssr: false,

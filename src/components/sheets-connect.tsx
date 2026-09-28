@@ -3,8 +3,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { ExternalLink, Sheet } from "lucide-react";
 import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Button } from "@/design-system/catchbox/components/button";
+import { Card } from "@/design-system/catchbox/components/card";
 import { formatDate } from "@/lib/format";
 import {
   completeSheetsConnect,

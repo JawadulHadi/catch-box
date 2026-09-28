@@ -1,4 +1,4 @@
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/design-system/catchbox/components/badge";
 import { reasonLabels, type CatchReason } from "@/lib/catchbox-service";
 import { cn } from "@/lib/utils";
 

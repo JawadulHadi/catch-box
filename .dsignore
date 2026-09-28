@@ -1,0 +1,7 @@
+src/components/**
+src/hooks/**
+src/lib/**
+src/server.ts
+src/start.ts
+src/router.tsx
+src/integrations/**

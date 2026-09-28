@@ -4,9 +4,9 @@ import { ArrowRight, Inbox } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { ReasonBadge } from "@/components/reason-badge";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card } from "@/design-system/catchbox/components/card";
+import { Button } from "@/design-system/catchbox/components/button";
+import { Skeleton } from "@/design-system/catchbox/components/skeleton";
 import { fetchCatches, seedExamples } from "@/lib/catchbox-service";
 import { shortUrl, timeAgo } from "@/lib/format";
 

@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "../lib/utils";
 
 /** The Catchbox mark: an open box catching a falling piece. */
 export function CatchboxMark({ className }: { className?: string }) {
