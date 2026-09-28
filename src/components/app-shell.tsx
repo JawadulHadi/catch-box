@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { Inbox, Database, Radar, Plug, LogOut } from "lucide-react";
+import { Inbox, Database, Radar, Plug, LogOut, Activity, Wrench } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -11,6 +11,8 @@ const navItems = [
   { to: "/queue", label: "Needs a quick look", icon: Inbox },
   { to: "/data", label: "Approved data", icon: Database },
   { to: "/scrapers", label: "Your scrapers", icon: Radar },
+  { to: "/status", label: "Live status", icon: Activity },
+  { to: "/builder", label: "Build a scraper", icon: Wrench },
   { to: "/connect", label: "Connect your scraper", icon: Plug },
 ] as const;
 
