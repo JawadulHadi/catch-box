@@ -146,3 +146,65 @@ export async function fetchRecentAlerts(): Promise<ScraperAlert[]> {
   if (error) throw new Error(error.message);
   return data ?? [];
 }
+
+export type ScraperStatus = {
+  site: string;
+  lastRunAt: string | null;
+  lastSuccessAt: string | null;
+  failureCount: number;
+  approvedCount: number;
+};
+
+/** Per-site live status: last run and how many approved records (which the sheet mirrors). */
+export async function fetchScraperStatus(): Promise<{ sites: ScraperStatus[]; sheetSyncedAt: string | null; sheetUrl: string | null }> {
+  const [jobs, approved, sheet] = await Promise.all([
+    supabase.from("scraper_jobs").select("site, last_run_at, last_success_at, last_failure_at, failure_count"),
+    supabase.from("scraped_warehouse").select("site, extracted_at"),
+    supabase.from("sheet_exports").select("last_synced_at, spreadsheet_url").maybeSingle(),
+  ]);
+  if (jobs.error) throw new Error(jobs.error.message);
+  if (approved.error) throw new Error(approved.error.message);
+  const counts = new Map<string, { n: number; latest: string | null }>();
+  for (const row of approved.data ?? []) {
+    const c = counts.get(row.site) ?? { n: 0, latest: null };
+    c.n += 1;
+    if (!c.latest || row.extracted_at > c.latest) c.latest = row.extracted_at;
+    counts.set(row.site, c);
+  }
+  const sites = (jobs.data ?? []).map((job) => {
+    const c = counts.get(job.site);
+    const candidates = [job.last_run_at, job.last_failure_at, c?.latest ?? null].filter((v): v is string => !!v).sort();
+    return {
+      site: job.site,
+      lastRunAt: candidates.at(-1) ?? null,
+      lastSuccessAt: job.last_success_at ?? c?.latest ?? null,
+      failureCount: job.failure_count,
+      approvedCount: c?.n ?? 0,
+    };
+  });
+  sites.sort((a, b) => (b.lastRunAt ?? "").localeCompare(a.lastRunAt ?? ""));
+  return { sites, sheetSyncedAt: sheet.data?.last_synced_at ?? null, sheetUrl: sheet.data?.spreadsheet_url ?? null };
+}
+
+export type Recipe = {
+  id: string;
+  site: string;
+  start_url: string;
+  fields: { name: string; selector: string; attr?: string }[];
+  last_run_at: string | null;
+  last_result: string | null;
+};
+
+export async function fetchRecipes(): Promise<Recipe[]> {
+  const { data, error } = await supabase
+    .from("scraper_recipes")
+    .select("id, site, start_url, fields, last_run_at, last_result")
+    .order("created_at", { ascending: false });
+  if (error) throw new Error(error.message);
+  return (data ?? []).map((row) => ({ ...row, fields: Array.isArray(row.fields) ? (row.fields as Recipe["fields"]) : [] }));
+}
+
+export async function deleteRecipe(id: string): Promise<void> {
+  const { error } = await supabase.from("scraper_recipes").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+}

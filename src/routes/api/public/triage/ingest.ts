@@ -76,6 +76,7 @@ export const Route = createFileRoute("/api/public/triage/ingest")({
             .update({
               failure_count: job.failure_count + 1,
               last_failure_at: new Date().toISOString(),
+              last_run_at: new Date().toISOString(),
             })
             .eq("id", job.id);
         } else {
@@ -84,6 +85,7 @@ export const Route = createFileRoute("/api/public/triage/ingest")({
             site,
             failure_count: 1,
             last_failure_at: new Date().toISOString(),
+            last_run_at: new Date().toISOString(),
           });
         }
 
