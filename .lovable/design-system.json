@@ -1,13 +1,13 @@
 {
   "meta": {
-    "name": "Data Guardian",
+    "name": "Catchbox",
     "package": "@ws-dd22e65cc6700b88943b/c4381d79-f48e-441b-be8a-8791ccc5f1fb",
     "version": "2.0.0",
     "framework": "react",
     "css_framework": "tailwind",
-    "starter_template": "custom_design_system_tailwind",
+    "starter_template": "custom_design_system",
     "theme_files": [
-      "src/styles.css"
+      "src/design-system/catchbox/styles.css"
     ],
     "source_type": "local",
     "source_manifest": {
@@ -390,72 +390,9 @@
   },
   "components": [
     {
-      "name": "AppShell",
-      "file": "src/components/app-shell",
-      "import_path": "",
-      "props": [
-        {
-          "name": "title",
-          "type": "string",
-          "required": true
-        },
-        {
-          "name": "subtitle",
-          "type": "string"
-        },
-        {
-          "name": "actions",
-          "type": "any"
-        },
-        {
-          "name": "children",
-          "type": "any",
-          "required": true
-        }
-      ]
-    },
-    {
-      "name": "CatchboxMark",
-      "file": "src/components/catchbox-mark",
-      "import_path": ""
-    },
-    {
-      "name": "ReasonBadge",
-      "file": "src/components/reason-badge",
-      "import_path": ""
-    },
-    {
-      "name": "SheetsConnect",
-      "file": "src/components/sheets-connect",
-      "import_path": ""
-    },
-    {
-      "name": "ThemeToggle",
-      "file": "src/components/theme-toggle",
-      "import_path": ""
-    },
-    {
-      "name": "Badge",
-      "file": "src/components/ui/badge",
-      "import_path": "",
-      "props": [
-        {
-          "name": "variant",
-          "type": "enum",
-          "values": [
-            "default",
-            "secondary",
-            "destructive",
-            "outline"
-          ],
-          "default": "default"
-        }
-      ]
-    },
-    {
       "name": "Button",
-      "file": "src/components/ui/button",
-      "import_path": "",
+      "file": "src/design-system/catchbox/components/button.tsx",
+      "import_path": "@/design-system/catchbox/components/button",
       "props": [
         {
           "name": "variant",
@@ -486,42 +423,375 @@
           "type": "boolean",
           "default": "false"
         }
+      ],
+      "usage": "Run an important or secondary action with a clear visual hierarchy.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<Button variant=\"default\" size=\"sm\">Approve record</Button>"
+        }
+      ],
+      "antipatterns": [
+        "Do not use a disabled button as the only way to explain an error."
+      ]
+    },
+    {
+      "name": "Badge",
+      "file": "src/design-system/catchbox/components/badge.tsx",
+      "import_path": "@/design-system/catchbox/components/badge",
+      "props": [
+        {
+          "name": "variant",
+          "type": "enum",
+          "values": [
+            "default",
+            "secondary",
+            "destructive",
+            "outline"
+          ],
+          "default": "default"
+        }
+      ],
+      "usage": "Show a compact status or category.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<Badge variant=\"outline\">Needs a look</Badge>"
+        }
+      ],
+      "antipatterns": [
+        "Do not use a badge as a button or status as color alone."
       ]
     },
     {
       "name": "Card",
-      "file": "src/components/ui/card",
-      "import_path": ""
+      "file": "src/design-system/catchbox/components/card.tsx",
+      "import_path": "@/design-system/catchbox/components/card",
+      "usage": "Group one distinct content item without nesting cards.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<Card><CardHeader><CardTitle>Blue Mug Shop</CardTitle></CardHeader><CardContent>Price needs review</CardContent></Card>"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
     },
     {
       "name": "CardHeader",
-      "file": "src/components/ui/card",
-      "import_path": ""
-    },
-    {
-      "name": "CardFooter",
-      "file": "src/components/ui/card",
-      "import_path": ""
+      "file": "src/design-system/catchbox/components/card.tsx",
+      "import_path": "@/design-system/catchbox/components/card",
+      "usage": "Compose CardHeader with its related card parts to display a complete, accessible specimen.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<CardHeader />"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
     },
     {
       "name": "CardTitle",
-      "file": "src/components/ui/card",
-      "import_path": ""
+      "file": "src/design-system/catchbox/components/card.tsx",
+      "import_path": "@/design-system/catchbox/components/card",
+      "usage": "Compose CardTitle with its related card parts to display a complete, accessible specimen.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<CardTitle>Needs a quick look</CardTitle>"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
     },
     {
       "name": "CardDescription",
-      "file": "src/components/ui/card",
-      "import_path": ""
+      "file": "src/design-system/catchbox/components/card.tsx",
+      "import_path": "@/design-system/catchbox/components/card",
+      "usage": "Compose CardDescription with its related card parts to display a complete, accessible specimen.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<CardDescription>Needs a quick look</CardDescription>"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
     },
     {
       "name": "CardContent",
-      "file": "src/components/ui/card",
-      "import_path": ""
+      "file": "src/design-system/catchbox/components/card.tsx",
+      "import_path": "@/design-system/catchbox/components/card",
+      "usage": "Compose CardContent with its related card parts to display a complete, accessible specimen.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<CardContent>Needs a quick look</CardContent>"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
     },
     {
-      "name": "Constants",
-      "file": "src/integrations/supabase/types",
-      "import_path": ""
+      "name": "CardFooter",
+      "file": "src/design-system/catchbox/components/card.tsx",
+      "import_path": "@/design-system/catchbox/components/card",
+      "usage": "Compose CardFooter with its related card parts to display a complete, accessible specimen.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<CardFooter>Needs a quick look</CardFooter>"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
+    },
+    {
+      "name": "Alert",
+      "file": "src/design-system/catchbox/components/alert.tsx",
+      "import_path": "@/design-system/catchbox/components/alert",
+      "usage": "Compose Alert with its related alert parts to display a complete, accessible specimen.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<Alert />"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
+    },
+    {
+      "name": "AlertTitle",
+      "file": "src/design-system/catchbox/components/alert.tsx",
+      "import_path": "@/design-system/catchbox/components/alert",
+      "usage": "Compose AlertTitle with its related alert parts to display a complete, accessible specimen.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<AlertTitle>Needs a quick look</AlertTitle>"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
+    },
+    {
+      "name": "AlertDescription",
+      "file": "src/design-system/catchbox/components/alert.tsx",
+      "import_path": "@/design-system/catchbox/components/alert",
+      "usage": "Compose AlertDescription with its related alert parts to display a complete, accessible specimen.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<AlertDescription>Needs a quick look</AlertDescription>"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
+    },
+    {
+      "name": "Input",
+      "file": "src/design-system/catchbox/components/input.tsx",
+      "import_path": "@/design-system/catchbox/components/input",
+      "usage": "Collect a short answer in a labeled form.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<><Label htmlFor=\"price\">Price</Label><Input id=\"price\" name=\"price\" /></>"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
+    },
+    {
+      "name": "Textarea",
+      "file": "src/design-system/catchbox/components/textarea.tsx",
+      "import_path": "@/design-system/catchbox/components/textarea",
+      "usage": "Collect longer notes or captured page text.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<><Label htmlFor=\"note\">Page text</Label><Textarea id=\"note\" name=\"note\" /></>"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
+    },
+    {
+      "name": "Label",
+      "file": "src/design-system/catchbox/components/label.tsx",
+      "import_path": "@/design-system/catchbox/components/label",
+      "usage": "Name a form field and associate it with its input.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<Label htmlFor=\"site\">Site name</Label>"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
+    },
+    {
+      "name": "Tabs",
+      "file": "src/design-system/catchbox/components/tabs.tsx",
+      "import_path": "@/design-system/catchbox/components/tabs",
+      "usage": "Compose Tabs with its related tabs parts to display a complete, accessible specimen.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<Tabs />"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
+    },
+    {
+      "name": "TabsList",
+      "file": "src/design-system/catchbox/components/tabs.tsx",
+      "import_path": "@/design-system/catchbox/components/tabs",
+      "usage": "Compose TabsList with its related tabs parts to display a complete, accessible specimen.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<TabsList />"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
+    },
+    {
+      "name": "TabsTrigger",
+      "file": "src/design-system/catchbox/components/tabs.tsx",
+      "import_path": "@/design-system/catchbox/components/tabs",
+      "usage": "Compose TabsTrigger with its related tabs parts to display a complete, accessible specimen.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<TabsTrigger>Needs a quick look</TabsTrigger>"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
+    },
+    {
+      "name": "TabsContent",
+      "file": "src/design-system/catchbox/components/tabs.tsx",
+      "import_path": "@/design-system/catchbox/components/tabs",
+      "usage": "Compose TabsContent with its related tabs parts to display a complete, accessible specimen.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<TabsContent>Needs a quick look</TabsContent>"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
+    },
+    {
+      "name": "Checkbox",
+      "file": "src/design-system/catchbox/components/checkbox.tsx",
+      "import_path": "@/design-system/catchbox/components/checkbox",
+      "usage": "Choose whether an independent option is on or off.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<Checkbox id=\"alerts\" aria-label=\"Email alerts\" />"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
+    },
+    {
+      "name": "Switch",
+      "file": "src/design-system/catchbox/components/switch.tsx",
+      "import_path": "@/design-system/catchbox/components/switch",
+      "usage": "Turn a setting on or off immediately.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<Switch aria-label=\"Keep sheet updated\" defaultChecked />"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
+    },
+    {
+      "name": "Progress",
+      "file": "src/design-system/catchbox/components/progress.tsx",
+      "import_path": "@/design-system/catchbox/components/progress",
+      "usage": "Show how much of a known task is complete.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<Progress value={72} aria-label=\"Successful runs\" />"
+        }
+      ],
+      "antipatterns": [
+        "Do not imply a known percentage for an indeterminate task."
+      ]
+    },
+    {
+      "name": "Skeleton",
+      "file": "src/design-system/catchbox/components/skeleton.tsx",
+      "import_path": "@/design-system/catchbox/components/skeleton",
+      "usage": "Mark a loading area without shifting the layout.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<Skeleton className=\"h-12 w-full\" />"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
+    },
+    {
+      "name": "CatchboxMark",
+      "file": "src/design-system/catchbox/components/catchbox-mark.tsx",
+      "import_path": "@/design-system/catchbox/components/catchbox-mark",
+      "usage": "Show the Catchbox mark beside the product name.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<CatchboxMark className=\"size-6\" />"
+        }
+      ],
+      "antipatterns": [
+        "Do not replace semantic controls with clickable divs or hardcode token values."
+      ]
+    },
+    {
+      "name": "ThemeToggle",
+      "file": "src/design-system/catchbox/components/theme-toggle.tsx",
+      "import_path": "@/design-system/catchbox/components/theme-toggle",
+      "usage": "Let people select the light or dark appearance.",
+      "examples": [
+        {
+          "label": "Catchbox example",
+          "code": "<ThemeToggle />"
+        }
+      ],
+      "antipatterns": [
+        "Do not mount more than one theme synchronization hook at a time."
+      ]
     }
   ]
 }
