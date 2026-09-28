@@ -208,3 +208,56 @@ export async function deleteRecipe(id: string): Promise<void> {
   const { error } = await supabase.from("scraper_recipes").delete().eq("id", id);
   if (error) throw new Error(error.message);
 }
+
+export type RunPoint = { ranAt: string; outcome: "approved" | "caught"; durationMs: number | null };
+
+export type ScraperHistory = {
+  site: string;
+  runs: RunPoint[];
+  totalRuns: number;
+  successRate: number | null;
+  avgDurationMs: number | null;
+  approvedCount: number;
+};
+
+/** Run history per site over the last 30 days, plus approved records (which the sheet mirrors). */
+export async function fetchScraperHistory(): Promise<ScraperHistory[]> {
+  const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+  const [runs, approved] = await Promise.all([
+    supabase
+      .from("scraper_runs")
+      .select("site, outcome, duration_ms, ran_at")
+      .gte("ran_at", since)
+      .order("ran_at", { ascending: true }),
+    supabase.from("scraped_warehouse").select("site"),
+  ]);
+  if (runs.error) throw new Error(runs.error.message);
+  if (approved.error) throw new Error(approved.error.message);
+
+  const approvedBySite = new Map<string, number>();
+  for (const row of approved.data ?? []) approvedBySite.set(row.site, (approvedBySite.get(row.site) ?? 0) + 1);
+
+  const bySite = new Map<string, RunPoint[]>();
+  for (const row of runs.data ?? []) {
+    const list = bySite.get(row.site) ?? [];
+    list.push({ ranAt: row.ran_at, outcome: row.outcome === "approved" ? "approved" : "caught", durationMs: row.duration_ms });
+    bySite.set(row.site, list);
+  }
+  const sites = new Set([...bySite.keys(), ...approvedBySite.keys()]);
+
+  return [...sites]
+    .map((site) => {
+      const list = bySite.get(site) ?? [];
+      const ok = list.filter((r) => r.outcome === "approved").length;
+      const timed = list.filter((r): r is RunPoint & { durationMs: number } => r.durationMs !== null);
+      return {
+        site,
+        runs: list,
+        totalRuns: list.length,
+        successRate: list.length ? ok / list.length : null,
+        avgDurationMs: timed.length ? timed.reduce((s, r) => s + r.durationMs, 0) / timed.length : null,
+        approvedCount: approvedBySite.get(site) ?? 0,
+      };
+    })
+    .sort((a, b) => b.totalRuns - a.totalRuns);
+}

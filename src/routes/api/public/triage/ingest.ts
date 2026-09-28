@@ -89,6 +89,8 @@ export const Route = createFileRoute("/api/public/triage/ingest")({
           });
         }
 
+        await supabaseAdmin.from("scraper_runs").insert({ owner_id: keyRow.owner_id, site, outcome: "caught" });
+
         return json({ ok: true, id: inserted.id }, 201);
       },
     },
