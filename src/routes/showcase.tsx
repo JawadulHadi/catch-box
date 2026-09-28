@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useCallback } from "react";
 
 import { CatchboxMark } from "@/design-system/catchbox/components/catchbox-mark";
 import { ThemeToggle } from "@/design-system/catchbox/components/theme-toggle";
@@ -68,6 +69,7 @@ const sections = [
   "Feedback",
   "Tabs",
   "In context",
+  "Components",
 ] as const;
 
 function Section({
@@ -94,6 +96,45 @@ function Caption({ children }: { children: React.ReactNode }) {
 function ShowcasePage() {
   const [filter, setFilter] = useState("");
   const shown = sections.filter((s) => s.toLowerCase().includes(filter.toLowerCase()));
+  const [activeComponent, setActiveComponent] = useState("Button");
+  const [showCode, setShowCode] = useState(false);
+  const components = [
+    "Button",
+    "Badge",
+    "Card",
+    "Alert",
+    "Input",
+    "Textarea",
+    "Label",
+    "Tabs",
+    "Checkbox",
+    "Switch",
+    "Progress",
+    "Skeleton",
+    "CatchboxMark",
+    "ThemeToggle",
+  ] as const;
+  const [componentFilter, setComponentFilter] = useState("");
+  const componentExamples: Record<string, string> = {
+    Button: `<Button variant="default">Approve record</Button>`,
+    Badge: `<Badge variant="outline">Needs a look</Badge>`,
+    Card: `<Card><CardTitle>Blue Mug Shop</CardTitle></Card>`,
+    Alert: `<Alert><AlertTitle>All caught up</AlertTitle></Alert>`,
+    Input: `<Input aria-label="Price" placeholder="€12,50" />`,
+    Textarea: `<Textarea aria-label="Page text" />`,
+    Label: `<Label htmlFor="price">Price</Label>`,
+    Tabs: `<Tabs defaultValue="pending"><TabsTrigger value="pending">Needs a look</TabsTrigger></Tabs>`,
+    Checkbox: `<Checkbox aria-label="Email alerts" />`,
+    Switch: `<Switch aria-label="Keep sheet updated" />`,
+    Progress: `<Progress value={72} aria-label="Successful runs" />`,
+    Skeleton: `<Skeleton className="h-12 w-full" />`,
+    CatchboxMark: `<CatchboxMark className="size-8" />`,
+    ThemeToggle: `<ThemeToggle />`,
+  };
+  const selectComponent = useCallback((name: string) => {
+    setActiveComponent(name);
+    setShowCode(false);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background lg:flex">
@@ -278,6 +319,123 @@ function ShowcasePage() {
               128 records approved this week.
             </TabsContent>
           </Tabs>
+        </Section>
+
+        <Section id="Components" title="Components">
+          <div className="grid gap-6 md:grid-cols-[11rem_minmax(0,1fr)]">
+            <div className="min-w-0">
+              <Input
+                aria-label="Find a component"
+                placeholder="Find a component"
+                value={componentFilter}
+                onChange={(event) => setComponentFilter(event.target.value)}
+              />
+              <nav
+                aria-label="Components"
+                className="mt-3 flex gap-1 overflow-x-auto pb-2 md:flex-col md:overflow-visible"
+              >
+                {components
+                  .filter((name) => name.toLowerCase().includes(componentFilter.toLowerCase()))
+                  .map((name) => (
+                    <Button
+                      key={name}
+                      variant={activeComponent === name ? "secondary" : "ghost"}
+                      size="sm"
+                      className="shrink-0 justify-start"
+                      onClick={() => selectComponent(name)}
+                    >
+                      {name}
+                    </Button>
+                  ))}
+              </nav>
+            </div>
+            <div className="min-w-0 border-t border-border pt-6 md:border-l md:border-t-0 md:pl-6 md:pt-0">
+              <h3 className="font-display text-xl font-semibold">{activeComponent}</h3>
+              <div className="mt-6 flex min-h-24 flex-wrap items-center gap-4">
+                {activeComponent === "Button" && (
+                  <>
+                    <Button>Approve record</Button>
+                    <Button variant="outline">Open record</Button>
+                    <Button variant="destructive">Throw away</Button>
+                    <Button disabled>Unavailable</Button>
+                  </>
+                )}
+                {activeComponent === "Badge" && (
+                  <>
+                    <Badge>New</Badge>
+                    <Badge variant="outline">Needs a look</Badge>
+                    <Badge variant="destructive">Blocked</Badge>
+                  </>
+                )}
+                {activeComponent === "Card" && (
+                  <Card className="w-full p-5">
+                    <p className="font-display font-semibold">Blue Mug Shop</p>
+                    <p className="mt-1 text-sm text-muted-foreground">Price ready for review</p>
+                  </Card>
+                )}
+                {activeComponent === "Alert" && (
+                  <Alert>
+                    <AlertTitle>All caught up</AlertTitle>
+                    <AlertDescription>Nothing needs a look right now.</AlertDescription>
+                  </Alert>
+                )}
+                {activeComponent === "Input" && (
+                  <Input aria-label="Price" placeholder="€12,50" className="max-w-xs" />
+                )}
+                {activeComponent === "Textarea" && (
+                  <Textarea aria-label="Page text" placeholder="Paste what you see on the page…" />
+                )}
+                {activeComponent === "Label" && (
+                  <Label htmlFor="gallery-price">
+                    Price <Input id="gallery-price" className="mt-2" placeholder="€12,50" />
+                  </Label>
+                )}
+                {activeComponent === "Tabs" && (
+                  <Tabs defaultValue="pending">
+                    <TabsList>
+                      <TabsTrigger value="pending">Needs a look</TabsTrigger>
+                      <TabsTrigger value="approved">Approved</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="pending">3 waiting for a review</TabsContent>
+                    <TabsContent value="approved">128 records approved</TabsContent>
+                  </Tabs>
+                )}
+                {activeComponent === "Checkbox" && (
+                  <div className="flex items-center gap-2">
+                    <Checkbox id="gallery-alerts" />
+                    <Label htmlFor="gallery-alerts">Email alerts</Label>
+                  </div>
+                )}
+                {activeComponent === "Switch" && (
+                  <div className="flex items-center gap-2">
+                    <Switch id="gallery-sheet" />
+                    <Label htmlFor="gallery-sheet">Keep sheet updated</Label>
+                  </div>
+                )}
+                {activeComponent === "Progress" && (
+                  <Progress value={72} aria-label="Successful runs" />
+                )}
+                {activeComponent === "Skeleton" && <Skeleton className="h-12 w-full" />}
+                {activeComponent === "CatchboxMark" && <CatchboxMark className="size-9" />}
+                {activeComponent === "ThemeToggle" && <ThemeToggle />}
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="mt-6"
+                onClick={() => setShowCode(!showCode)}
+                aria-expanded={showCode}
+              >
+                {" "}
+                {showCode ? "Hide code" : "Show code"}{" "}
+              </Button>
+              {showCode && (
+                <pre className="mt-2 overflow-x-auto rounded-md bg-muted p-4 font-mono text-xs">
+                  <code>{componentExamples[activeComponent]}</code>
+                </pre>
+              )}
+            </div>
+          </div>
         </Section>
 
         <Section id="In context" title="In context">
