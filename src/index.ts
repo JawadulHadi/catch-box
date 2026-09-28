@@ -2,7 +2,14 @@ export { Button, buttonVariants } from "./design-system/catchbox/components/butt
 export type { ButtonProps } from "./design-system/catchbox/components/button";
 export { Badge, badgeVariants } from "./design-system/catchbox/components/badge";
 export type { BadgeProps } from "./design-system/catchbox/components/badge";
-export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./design-system/catchbox/components/card";
+export {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "./design-system/catchbox/components/card";
 export { Alert, AlertTitle, AlertDescription } from "./design-system/catchbox/components/alert";
 export { Input } from "./design-system/catchbox/components/input";
 export type { InputProps } from "./design-system/catchbox/components/input";

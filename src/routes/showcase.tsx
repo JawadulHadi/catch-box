@@ -18,7 +18,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/design-system/catchb
 import { Textarea } from "@/design-system/catchbox/components/textarea";
 import { cn } from "@/design-system/catchbox/lib/utils";
 
-const description = "Every color, font and building block Catchbox uses, in both the dark and light themes.";
+const description =
+  "Every color, font and building block Catchbox uses, in both the dark and light themes.";
 
 export const Route = createFileRoute("/showcase")({
   head: () => ({
@@ -38,17 +39,46 @@ const swatches = [
   { token: "bg-background", role: "Page background", className: "bg-background text-foreground" },
   { token: "bg-card", role: "Cards and panels", className: "bg-card text-card-foreground" },
   { token: "bg-surface", role: "Raised surface", className: "bg-surface text-surface-foreground" },
-  { token: "bg-primary", role: "The amber catch — main actions", className: "bg-primary text-primary-foreground" },
+  {
+    token: "bg-primary",
+    role: "The amber catch — main actions",
+    className: "bg-primary text-primary-foreground",
+  },
   { token: "bg-accent", role: "Soft highlight", className: "bg-accent text-accent-foreground" },
   { token: "bg-muted", role: "Quiet areas", className: "bg-muted text-muted-foreground" },
-  { token: "bg-success", role: "Approved, running well", className: "bg-success text-success-foreground" },
+  {
+    token: "bg-success",
+    role: "Approved, running well",
+    className: "bg-success text-success-foreground",
+  },
   { token: "bg-warning", role: "A few hiccups", className: "bg-warning text-warning-foreground" },
-  { token: "bg-destructive", role: "Needs attention", className: "bg-destructive text-destructive-foreground" },
+  {
+    token: "bg-destructive",
+    role: "Needs attention",
+    className: "bg-destructive text-destructive-foreground",
+  },
 ] as const;
 
-const sections = ["Colors", "Type", "Buttons", "Badges", "Form fields", "Feedback", "Tabs", "In context"] as const;
+const sections = [
+  "Colors",
+  "Type",
+  "Buttons",
+  "Badges",
+  "Form fields",
+  "Feedback",
+  "Tabs",
+  "In context",
+] as const;
 
-function Section({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
+function Section({
+  id,
+  title,
+  children,
+}: {
+  id: string;
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <section id={id} className="scroll-mt-8 border-t border-border py-10">
       <h2 className="font-display text-2xl font-semibold">{title}</h2>
@@ -81,7 +111,11 @@ function ShowcasePage() {
         />
         <nav className="mt-4 flex flex-wrap gap-1 lg:flex-col">
           {shown.map((s) => (
-            <a key={s} href={`#${s}`} className="rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-sidebar-accent hover:text-foreground">
+            <a
+              key={s}
+              href={`#${s}`}
+              className="rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-sidebar-accent hover:text-foreground"
+            >
               {s}
             </a>
           ))}
@@ -91,14 +125,23 @@ function ShowcasePage() {
 
       <main className="mx-auto w-full max-w-5xl px-5 py-10 lg:px-10">
         <p className="text-sm font-medium text-primary">Look and feel</p>
-        <h1 className="mt-2 font-display text-4xl font-semibold lg:text-5xl">Calm, warm, and quick to read.</h1>
-        <p className="mt-3 max-w-2xl text-muted-foreground">{description} Flip the theme in the sidebar to check both.</p>
+        <h1 className="mt-2 font-display text-4xl font-semibold lg:text-5xl">
+          Calm, warm, and quick to read.
+        </h1>
+        <p className="mt-3 max-w-2xl text-muted-foreground">
+          {description} Flip the theme in the sidebar to check both.
+        </p>
 
         <Section id="Colors" title="Colors">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {swatches.map((s) => (
               <div key={s.token}>
-                <div className={cn("flex h-24 items-end rounded-xl border border-border p-4 text-sm font-medium", s.className)}>
+                <div
+                  className={cn(
+                    "flex h-24 items-end rounded-xl border border-border p-4 text-sm font-medium",
+                    s.className,
+                  )}
+                >
                   Aa — {s.role}
                 </div>
                 <Caption>{s.token}</Caption>
@@ -118,7 +161,10 @@ function ShowcasePage() {
               <Caption>font-display text-2xl</Caption>
             </div>
             <div>
-              <p className="max-w-2xl">The page changed, so the price wasn't where your scraper expected. Add it below and press approve.</p>
+              <p className="max-w-2xl">
+                The page changed, so the price wasn't where your scraper expected. Add it below and
+                press approve.
+              </p>
               <Caption>font-sans text-base · IBM Plex Sans 400–600</Caption>
             </div>
             <div>
@@ -134,16 +180,22 @@ function ShowcasePage() {
 
         <Section id="Buttons" title="Buttons">
           <div className="grid gap-6 sm:grid-cols-2">
-            {(["default", "secondary", "outline", "ghost", "destructive", "link"] as const).map((variant) => (
-              <div key={variant}>
-                <div className="flex flex-wrap items-center gap-3">
-                  <Button variant={variant}>Approve record</Button>
-                  <Button variant={variant} size="sm">Small</Button>
-                  <Button variant={variant} disabled>Disabled</Button>
+            {(["default", "secondary", "outline", "ghost", "destructive", "link"] as const).map(
+              (variant) => (
+                <div key={variant}>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Button variant={variant}>Approve record</Button>
+                    <Button variant={variant} size="sm">
+                      Small
+                    </Button>
+                    <Button variant={variant} disabled>
+                      Disabled
+                    </Button>
+                  </div>
+                  <Caption>{`<Button variant="${variant}">`}</Caption>
                 </div>
-                <Caption>{`<Button variant="${variant}">`}</Caption>
-              </div>
-            ))}
+              ),
+            )}
           </div>
         </Section>
 
@@ -153,8 +205,12 @@ function ShowcasePage() {
             <Badge variant="secondary">Blue Mug Shop</Badge>
             <Badge variant="outline">The page changed</Badge>
             <Badge variant="destructive">Blocked by the site</Badge>
-            <Badge variant="outline" className="border-success/40 bg-success/10 text-success">Running smoothly</Badge>
-            <Badge variant="outline" className="border-warning/40 bg-warning/10 text-warning">A few hiccups</Badge>
+            <Badge variant="outline" className="border-success/40 bg-success/10 text-success">
+              Running smoothly
+            </Badge>
+            <Badge variant="outline" className="border-warning/40 bg-warning/10 text-warning">
+              A few hiccups
+            </Badge>
           </div>
           <Caption>{`<Badge variant="default | secondary | outline | destructive">`}</Caption>
         </Section>
@@ -199,7 +255,11 @@ function ShowcasePage() {
               <Caption>{"<Progress value={72} />"} — 72 % of runs worked</Caption>
             </div>
             <Skeleton className="h-16 w-full rounded-xl" />
-            <Button variant="outline" className="w-fit" onClick={() => toast.success("Approved and added to your sheet.")}>
+            <Button
+              variant="outline"
+              className="w-fit"
+              onClick={() => toast.success("Approved and added to your sheet.")}
+            >
               Show a toast
             </Button>
           </div>
@@ -211,8 +271,12 @@ function ShowcasePage() {
               <TabsTrigger value="pending">Needs a look</TabsTrigger>
               <TabsTrigger value="resolved">Approved</TabsTrigger>
             </TabsList>
-            <TabsContent value="pending" className="text-sm text-muted-foreground">3 scrapes are waiting for you.</TabsContent>
-            <TabsContent value="resolved" className="text-sm text-muted-foreground">128 records approved this week.</TabsContent>
+            <TabsContent value="pending" className="text-sm text-muted-foreground">
+              3 scrapes are waiting for you.
+            </TabsContent>
+            <TabsContent value="resolved" className="text-sm text-muted-foreground">
+              128 records approved this week.
+            </TabsContent>
           </Tabs>
         </Section>
 
@@ -228,7 +292,9 @@ function ShowcasePage() {
             <div className="mt-5 grid gap-2">
               <Label htmlFor="sc-fix">Price</Label>
               <Input id="sc-fix" defaultValue="€12,50" />
-              <p className="text-xs text-muted-foreground">Found on the page: “Now only €12,50 incl. VAT.”</p>
+              <p className="text-xs text-muted-foreground">
+                Found on the page: “Now only €12,50 incl. VAT.”
+              </p>
             </div>
             <div className="mt-6 flex gap-3">
               <Button>Approve</Button>

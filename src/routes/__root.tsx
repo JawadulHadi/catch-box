@@ -15,7 +15,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "@/components/ui/sonner";
 import { useThemeSync } from "@/design-system/catchbox/hooks/use-theme";
 
-
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -147,4 +146,3 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
-
