@@ -42,12 +42,26 @@ function ScrapersPage() {
     queryKey: ["scrapers"],
     queryFn: fetchScrapers,
   });
+  const { data: alerts } = useQuery({ queryKey: ["scraper-alerts"], queryFn: fetchRecentAlerts });
 
   return (
     <AppShell
       title="Your scrapers"
       subtitle="The sites you're watching, how often each one is running into trouble, and when it last did."
     >
+      {alerts && alerts.length > 0 ? (
+        <Card className="mb-6 border-warning/40 bg-warning/10 p-5 text-sm">
+          <h2 className="font-semibold">Worth a look today</h2>
+          <ul className="mt-2 space-y-1 text-muted-foreground">
+            {alerts.map((alert) => (
+              <li key={alert.id}>
+                <span className="font-medium text-foreground">{alert.site}</span> failed{" "}
+                {alert.failures_in_window} times in the last day.
+              </li>
+            ))}
+          </ul>
+        </Card>
+      ) : null}
       {error ? (
         <Card className="border-destructive/40 bg-destructive/10 p-6 text-sm">
           We couldn't load your scrapers. Please refresh and try again.
