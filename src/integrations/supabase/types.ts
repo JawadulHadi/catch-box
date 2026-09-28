@@ -14,16 +14,147 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      human_triage_queue: {
+        Row: {
+          created_at: string
+          error_trace: string | null
+          error_type: Database["public"]["Enums"]["catch_reason"]
+          id: string
+          missing_fields: string[]
+          owner_id: string
+          raw_payload: Json
+          resolved_at: string | null
+          site: string
+          status: Database["public"]["Enums"]["catch_status"]
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          error_trace?: string | null
+          error_type?: Database["public"]["Enums"]["catch_reason"]
+          id?: string
+          missing_fields?: string[]
+          owner_id?: string
+          raw_payload?: Json
+          resolved_at?: string | null
+          site: string
+          status?: Database["public"]["Enums"]["catch_status"]
+          url: string
+        }
+        Update: {
+          created_at?: string
+          error_trace?: string | null
+          error_type?: Database["public"]["Enums"]["catch_reason"]
+          id?: string
+          missing_fields?: string[]
+          owner_id?: string
+          raw_payload?: Json
+          resolved_at?: string | null
+          site?: string
+          status?: Database["public"]["Enums"]["catch_status"]
+          url?: string
+        }
+        Relationships: []
+      }
+      ingest_keys: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          owner_id: string
+          rotated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          owner_id?: string
+          rotated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          owner_id?: string
+          rotated_at?: string | null
+        }
+        Relationships: []
+      }
+      scraped_warehouse: {
+        Row: {
+          data: Json
+          extracted_at: string
+          id: string
+          owner_id: string
+          site: string
+          source_record_id: string | null
+          url: string
+        }
+        Insert: {
+          data?: Json
+          extracted_at?: string
+          id?: string
+          owner_id?: string
+          site: string
+          source_record_id?: string | null
+          url: string
+        }
+        Update: {
+          data?: Json
+          extracted_at?: string
+          id?: string
+          owner_id?: string
+          site?: string
+          source_record_id?: string | null
+          url?: string
+        }
+        Relationships: []
+      }
+      scraper_jobs: {
+        Row: {
+          created_at: string
+          failure_count: number
+          id: string
+          last_failure_at: string | null
+          owner_id: string
+          schedule: string
+          site: string
+        }
+        Insert: {
+          created_at?: string
+          failure_count?: number
+          id?: string
+          last_failure_at?: string | null
+          owner_id?: string
+          schedule?: string
+          site: string
+        }
+        Update: {
+          created_at?: string
+          failure_count?: number
+          id?: string
+          last_failure_at?: string | null
+          owner_id?: string
+          schedule?: string
+          site?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      ensure_ingest_key: { Args: { p_rotate?: boolean }; Returns: string }
+      promote_triage_record: {
+        Args: { p_data: Json; p_record_id: string }
+        Returns: string
+      }
+      seed_demo_data: { Args: never; Returns: undefined }
     }
     Enums: {
-      [_ in never]: never
+      catch_reason: "page_changed" | "blocked" | "missing_info" | "other"
+      catch_status: "pending" | "resolved" | "discarded"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +281,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      catch_reason: ["page_changed", "blocked", "missing_info", "other"],
+      catch_status: ["pending", "resolved", "discarded"],
+    },
   },
 } as const
