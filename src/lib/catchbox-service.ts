@@ -132,3 +132,17 @@ export async function countPendingCatches(): Promise<number> {
   if (error) throw new Error(error.message);
   return count ?? 0;
 }
+
+export type ScraperAlert = { id: string; site: string; failures_in_window: number; created_at: string };
+
+/** Sites that failed 3+ times in the last 24 hours. */
+export async function fetchRecentAlerts(): Promise<ScraperAlert[]> {
+  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const { data, error } = await supabase
+    .from("scraper_alerts")
+    .select("id, site, failures_in_window, created_at")
+    .gte("created_at", since)
+    .order("created_at", { ascending: false });
+  if (error) throw new Error(error.message);
+  return data ?? [];
+}

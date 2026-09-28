@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { approveCatch, discardCatch, fetchCatch } from "@/lib/catchbox-service";
 import { timeAgo } from "@/lib/format";
 import { suggestFieldValues } from "@/lib/suggest.functions";
+import { syncSheet } from "@/lib/sheets.functions";
 import type { FieldSuggestion } from "@/lib/suggest-types";
 
 export const Route = createFileRoute("/_authenticated/fix/$id")({
@@ -50,6 +51,7 @@ function FixPage() {
   const [pageText, setPageText] = useState("");
   const [suggestions, setSuggestions] = useState<Record<string, FieldSuggestion>>({});
   const runSuggest = useServerFn(suggestFieldValues);
+  const runSheetSync = useServerFn(syncSheet);
 
   const { data, isPending, error } = useQuery({
     queryKey: ["catch", id],
@@ -82,6 +84,10 @@ function FixPage() {
       queryClient.invalidateQueries({ queryKey: ["catches"] });
       queryClient.invalidateQueries({ queryKey: ["approved"] });
       toast.success("Approved — it's in your approved data now.");
+      // Keep the user's Google Sheet in step; never block the approval on it.
+      runSheetSync()
+        .then(() => queryClient.invalidateQueries({ queryKey: ["sheet-status"] }))
+        .catch(() => toast.error("Approved, but your Google Sheet didn't update. We'll retry next time."));
       navigate({ to: "/queue" });
     },
     onError: (mutationError: Error) => {

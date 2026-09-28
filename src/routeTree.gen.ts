@@ -17,6 +17,7 @@ import { Route as AuthenticatedDataRouteImport } from './routes/_authenticated/d
 import { Route as AuthenticatedQueueRouteImport } from './routes/_authenticated/queue'
 import { Route as AuthenticatedScrapersRouteImport } from './routes/_authenticated/scrapers'
 import { Route as AuthenticatedFixIdRouteImport } from './routes/_authenticated/fix.$id'
+import { Route as OauthGoogleSheetsReturnRouteImport } from './routes/oauth/google-sheets/return'
 import { Route as ApiPublicTriageIngestRouteImport } from './routes/api/public/triage/ingest'
 
 const IndexRoute = IndexRouteImport.update({
@@ -58,6 +59,11 @@ const AuthenticatedFixIdRoute = AuthenticatedFixIdRouteImport.update({
   path: '/fix/$id',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const OauthGoogleSheetsReturnRoute = OauthGoogleSheetsReturnRouteImport.update({
+  id: '/oauth/google-sheets/return',
+  path: '/oauth/google-sheets/return',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicTriageIngestRoute = ApiPublicTriageIngestRouteImport.update({
   id: '/api/public/triage/ingest',
   path: '/api/public/triage/ingest',
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/queue': typeof AuthenticatedQueueRoute
   '/scrapers': typeof AuthenticatedScrapersRoute
   '/fix/$id': typeof AuthenticatedFixIdRoute
+  '/oauth/google-sheets/return': typeof OauthGoogleSheetsReturnRoute
   '/api/public/triage/ingest': typeof ApiPublicTriageIngestRoute
 }
 export interface FileRoutesByTo {
@@ -82,6 +89,7 @@ export interface FileRoutesByTo {
   '/queue': typeof AuthenticatedQueueRoute
   '/scrapers': typeof AuthenticatedScrapersRoute
   '/fix/$id': typeof AuthenticatedFixIdRoute
+  '/oauth/google-sheets/return': typeof OauthGoogleSheetsReturnRoute
   '/api/public/triage/ingest': typeof ApiPublicTriageIngestRoute
 }
 export interface FileRoutesById {
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/_authenticated/queue': typeof AuthenticatedQueueRoute
   '/_authenticated/scrapers': typeof AuthenticatedScrapersRoute
   '/_authenticated/fix/$id': typeof AuthenticatedFixIdRoute
+  '/oauth/google-sheets/return': typeof OauthGoogleSheetsReturnRoute
   '/api/public/triage/ingest': typeof ApiPublicTriageIngestRoute
 }
 export interface FileRouteTypes {
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/queue'
     | '/scrapers'
     | '/fix/$id'
+    | '/oauth/google-sheets/return'
     | '/api/public/triage/ingest'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/queue'
     | '/scrapers'
     | '/fix/$id'
+    | '/oauth/google-sheets/return'
     | '/api/public/triage/ingest'
   id:
     | '__root__'
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/_authenticated/queue'
     | '/_authenticated/scrapers'
     | '/_authenticated/fix/$id'
+    | '/oauth/google-sheets/return'
     | '/api/public/triage/ingest'
   fileRoutesById: FileRoutesById
 }
@@ -134,6 +146,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  OauthGoogleSheetsReturnRoute: typeof OauthGoogleSheetsReturnRoute
   ApiPublicTriageIngestRoute: typeof ApiPublicTriageIngestRoute
 }
 
@@ -195,6 +208,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFixIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/oauth/google-sheets/return': {
+      id: '/oauth/google-sheets/return'
+      path: '/oauth/google-sheets/return'
+      fullPath: '/oauth/google-sheets/return'
+      preLoaderRoute: typeof OauthGoogleSheetsReturnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/triage/ingest': {
       id: '/api/public/triage/ingest'
       path: '/api/public/triage/ingest'
@@ -228,6 +248,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  OauthGoogleSheetsReturnRoute: OauthGoogleSheetsReturnRoute,
   ApiPublicTriageIngestRoute: ApiPublicTriageIngestRoute,
 }
 export const routeTree = rootRouteImport

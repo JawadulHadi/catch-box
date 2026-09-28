@@ -16,6 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { SheetsConnect } from "@/components/sheets-connect";
 import { fetchApproved } from "@/lib/catchbox-service";
 import { downloadTextFile, formatDate, shortUrl, toCsv } from "@/lib/format";
 
@@ -81,6 +82,8 @@ function DataPage() {
         </Button>
       }
     >
+      <SheetsConnect />
+
       <div className="relative mb-6 max-w-sm">
         <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input
@@ -152,8 +155,7 @@ function DataPage() {
             </Table>
           </div>
           <div className="border-t border-border bg-surface px-5 py-3 text-xs text-muted-foreground">
-            {rows.length} {rows.length === 1 ? "record" : "records"} · a live Google Sheet is coming
-            soon
+            {rows.length} {rows.length === 1 ? "record" : "records"}
           </div>
         </Card>
       )}
