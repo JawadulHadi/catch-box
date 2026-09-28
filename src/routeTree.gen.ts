@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ShowcaseRouteImport } from './routes/showcase'
 import { Route as AuthenticatedBuilderRouteImport } from './routes/_authenticated/builder'
 import { Route as AuthenticatedConnectRouteImport } from './routes/_authenticated/connect'
 import { Route as AuthenticatedDataRouteImport } from './routes/_authenticated/data'
@@ -35,6 +36,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShowcaseRoute = ShowcaseRouteImport.update({
+  id: '/showcase',
+  path: '/showcase',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedBuilderRoute = AuthenticatedBuilderRouteImport.update({
@@ -91,6 +97,7 @@ const ApiPublicTriageIngestRoute = ApiPublicTriageIngestRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/showcase': typeof ShowcaseRoute
   '/builder': typeof AuthenticatedBuilderRoute
   '/connect': typeof AuthenticatedConnectRoute
   '/data': typeof AuthenticatedDataRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/showcase': typeof ShowcaseRoute
   '/builder': typeof AuthenticatedBuilderRoute
   '/connect': typeof AuthenticatedConnectRoute
   '/data': typeof AuthenticatedDataRoute
@@ -121,6 +129,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/showcase': typeof ShowcaseRoute
   '/_authenticated/builder': typeof AuthenticatedBuilderRoute
   '/_authenticated/connect': typeof AuthenticatedConnectRoute
   '/_authenticated/data': typeof AuthenticatedDataRoute
@@ -137,6 +146,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/showcase'
     | '/builder'
     | '/connect'
     | '/data'
@@ -151,6 +161,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/showcase'
     | '/builder'
     | '/connect'
     | '/data'
@@ -166,6 +177,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/showcase'
     | '/_authenticated/builder'
     | '/_authenticated/connect'
     | '/_authenticated/data'
@@ -182,6 +194,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ShowcaseRoute: typeof ShowcaseRoute
   OauthGoogleSheetsReturnRoute: typeof OauthGoogleSheetsReturnRoute
   ApiPublicTriageIngestRoute: typeof ApiPublicTriageIngestRoute
 }
@@ -207,6 +220,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/showcase': {
+      id: '/showcase'
+      path: '/showcase'
+      fullPath: '/showcase'
+      preLoaderRoute: typeof ShowcaseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/builder': {
@@ -311,6 +331,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ShowcaseRoute: ShowcaseRoute,
   OauthGoogleSheetsReturnRoute: OauthGoogleSheetsReturnRoute,
   ApiPublicTriageIngestRoute: ApiPublicTriageIngestRoute,
 }
