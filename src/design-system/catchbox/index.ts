@@ -11,6 +11,7 @@ export { Tabs, TabsList, TabsTrigger, TabsContent } from "./components/tabs";
 export { Checkbox } from "./components/checkbox";
 export { Switch } from "./components/switch";
 export { Progress } from "./components/progress";
+export type { ProgressProps } from "./components/progress";
 export { Skeleton } from "./components/skeleton";
 export { CatchboxMark } from "./components/catchbox-mark";
 export type { CatchboxMarkProps } from "./components/catchbox-mark";
