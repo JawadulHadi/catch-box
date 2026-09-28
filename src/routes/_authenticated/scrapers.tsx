@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { fetchScrapers } from "@/lib/catchbox-service";
+import { fetchRecentAlerts, fetchScrapers } from "@/lib/catchbox-service";
 import { timeAgo } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/scrapers")({
