@@ -4,7 +4,7 @@ Catchbox is calm, warm, and quick to read. It gives people a clear place to noti
 
 ## Setup
 
-This is a local React and Tailwind CSS v4 library. After attaching it, import the canonical stylesheet once from `@/design-system/catchbox/styles.css` in the consumer's app stylesheet. The sheet contains both the Tailwind theme mapping and the semantic light and dark token values. Never import only a flat list of variables: utilities such as `bg-primary` need the `@theme` mapping. Import components from `@/design-system/catchbox` or from the matching component subpath. The library needs React, Radix primitives for its controls, `class-variance-authority`, `clsx`, `tailwind-merge`, `lucide-react`, and `zustand`.
+This is a local React and Tailwind CSS v4 library. After attaching it, import the canonical stylesheet once from `@/design-system/catchbox/styles.css` in the consumer's app stylesheet. The sheet contains the Tailwind theme mapping, bundled display/body/mono fonts, and semantic light and dark token values. Never import only a flat list of variables: utilities such as `bg-primary` need the `@theme` mapping. Import components from `@/design-system/catchbox` or from the matching component subpath. The library needs React, Radix primitives for its controls, `class-variance-authority`, `clsx`, `tailwind-merge`, `lucide-react`, and `zustand`.
 
 Mount `useThemeSync()` once in a client-rendered root component. It reads the saved Catchbox theme after hydration and applies `.dark` or `.light` to the document element. `ThemeToggle` changes and persists the choice. Without that hook, consumers can still set the root class themselves to select a theme.
 

@@ -1,13 +1,18 @@
+import * as React from "react";
 import { cn } from "../lib/utils";
 
 /** The Catchbox mark: an open box catching a falling piece. */
-export function CatchboxMark({ className }: { className?: string }) {
+export interface CatchboxMarkProps extends React.SVGProps<SVGSVGElement> {}
+
+export const CatchboxMark = React.forwardRef<SVGSVGElement, CatchboxMarkProps>(function CatchboxMark({ className, ...props }, ref) {
   return (
     <svg
+      ref={ref}
       viewBox="0 0 32 32"
       fill="none"
       aria-hidden="true"
       className={cn("text-primary", className)}
+      {...props}
     >
       <path
         d="M4 14v11a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V14"
@@ -32,4 +37,4 @@ export function CatchboxMark({ className }: { className?: string }) {
       />
     </svg>
   );
-}
+});
