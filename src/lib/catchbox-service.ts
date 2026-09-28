@@ -1,4 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
+import type { Json } from "@/integrations/supabase/types";
+
 
 export type CatchReason = "page_changed" | "blocked" | "missing_info" | "other";
 export type CatchStatus = "pending" | "resolved" | "discarded";
@@ -77,7 +79,7 @@ export async function fetchCatch(id: string): Promise<CatchItem | null> {
 export async function approveCatch(id: string, values: Record<string, unknown>): Promise<void> {
   const { error } = await supabase.rpc("promote_triage_record", {
     p_record_id: id,
-    p_data: values,
+    p_data: values as Json,
   });
   if (error) throw new Error(error.message);
 }

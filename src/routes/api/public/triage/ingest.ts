@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 
+import type { Json } from "@/integrations/supabase/types";
+
+
 const payloadSchema = z.object({
   url: z.string().url().max(2000),
   site: z.string().min(1).max(200).optional(),
@@ -52,7 +55,7 @@ export const Route = createFileRoute("/api/public/triage/ingest")({
             url: body.url,
             error_type: body.reason ?? "other",
             error_trace: body.error ?? null,
-            raw_payload: body.got ?? {},
+            raw_payload: (body.got ?? {}) as Json,
             missing_fields: body.missing ?? [],
           })
           .select("id")
