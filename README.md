@@ -39,7 +39,7 @@ bun run lint    # lint
 2. Copy your personal key and the snippet.
 3. Wherever your scraper would crash or save half-empty data, call `catch(...)` instead.
 
-Under the hood that posts to `POST /api/public/triage/ingest` with an `x-ingest-key` header:
+Under the hood, it posts to `POST /api/public/triage/ingest` with an `x-ingest-key` header:
 
 ```json
 {
@@ -52,31 +52,4 @@ Under the hood that posts to `POST /api/public/triage/ingest` with an `x-ingest-
 }
 ```
 
-The endpoint works out who the failure belongs to from the key alone — a caller can never claim someone else's account.
-
-## How it's built
-
-- TanStack Start (React 19, Vite), Tailwind CSS v4, shadcn/ui
-- Postgres with row-level security: every table carries an owner, and policies scope every read and write to the signed-in user
-- Approving is one all-or-nothing database function (`promote_triage_record`): it saves the fixed record and closes the inbox item together, so nothing can end up half saved
-- Data access goes through `src/lib/catchbox-service.ts`; screens read it with React Query
-
-## Project layout
-
-```
-src/
-  design-system/catchbox/ reusable themes, fonts, and controls
-  components/         Catchbox app-only UI (navigation and data views)
-  lib/
-    catchbox-service.ts   all database reads and writes
-    format.ts             dates, relative times, CSV helpers
-  routes/
-    index.tsx             landing
-    auth.tsx              sign-in
-    _authenticated/       the signed-in screens
-    api/public/triage/    the endpoint your scraper posts to
-```
-
-## Catchbox design system
-
-The reusable light and dark themes, semantic colors, typography, and controls live in `src/design-system/catchbox/`. The app's `src/styles.css` imports its theme entry so this app also verifies the same styles attached projects receive. To use it in another Lovable project, attach this design-system project using **Use this design system** in the project menu, then import `@/design-system/catchbox/styles.css` once in that project's stylesheet and import controls from `@/design-system/catchbox`. Mount `useThemeSync()` in a client-rendered root to restore the saved appearance, and render `ThemeToggle` wherever people can switch themes. Open `/showcase` to compare the controls in both appearances.
+_The endpoint works out who the failure belongs to from the key alone — a caller can never claim someone else's account_
