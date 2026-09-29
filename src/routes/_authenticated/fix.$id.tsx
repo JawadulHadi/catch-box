@@ -89,7 +89,9 @@ function FixPage() {
       // Keep the user's Google Sheet in step; never block the approval on it.
       runSheetSync()
         .then(() => queryClient.invalidateQueries({ queryKey: ["sheet-status"] }))
-        .catch(() => toast.error("Approved, but your Google Sheet didn't update. We'll retry next time."));
+        .catch(() =>
+          toast.error("Approved, but your Google Sheet didn't update. We'll retry next time."),
+        );
       navigate({ to: "/queue" });
     },
     onError: (mutationError: Error) => {
@@ -114,7 +116,8 @@ function FixPage() {
       const fills: Record<string, string> = {};
       for (const item of list) {
         byField[item.field] = item;
-        if (item.value !== null && valueFor(item.field).trim() === "") fills[item.field] = item.value;
+        if (item.value !== null && valueFor(item.field).trim() === "")
+          fills[item.field] = item.value;
       }
       setSuggestions(byField);
       setEdits((current) => ({ ...current, ...fills }));

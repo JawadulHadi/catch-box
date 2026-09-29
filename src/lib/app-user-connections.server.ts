@@ -48,5 +48,9 @@ export async function getConnectionKeyForUser(userId: string, connectorId: strin
 
 export async function deleteConnectionKeyForUser(userId: string, connectorId: string) {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  await supabaseAdmin.from("app_user_connections").delete().eq("user_id", userId).eq("connector_id", connectorId);
+  await supabaseAdmin
+    .from("app_user_connections")
+    .delete()
+    .eq("user_id", userId)
+    .eq("connector_id", connectorId);
 }

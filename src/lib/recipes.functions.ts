@@ -37,10 +37,17 @@ function isPublicUrl(raw: string): boolean {
 
 export const saveRecipe = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => recipeSchema.extend({ id: z.string().uuid().optional() }).parse(data))
+  .inputValidator((data: unknown) =>
+    recipeSchema.extend({ id: z.string().uuid().optional() }).parse(data),
+  )
   .handler(async ({ data, context }) => {
-    if (!isPublicUrl(data.startUrl)) throw new Error("Please use a public web address that starts with http or https.");
-    const row = { site: data.site, start_url: data.startUrl, fields: data.fields as unknown as Json };
+    if (!isPublicUrl(data.startUrl))
+      throw new Error("Please use a public web address that starts with http or https.");
+    const row = {
+      site: data.site,
+      start_url: data.startUrl,
+      fields: data.fields as unknown as Json,
+    };
     const query = data.id
       ? context.supabase.from("scraper_recipes").update(row).eq("id", data.id).select("id").single()
       : context.supabase.from("scraper_recipes").insert(row).select("id").single();
@@ -48,7 +55,10 @@ export const saveRecipe = createServerFn({ method: "POST" })
     if (error) throw new Error("We couldn't save that scraper. Please try again.");
     await context.supabase
       .from("scraper_jobs")
-      .upsert({ site: data.site, owner_id: context.userId }, { onConflict: "owner_id,site", ignoreDuplicates: true });
+      .upsert(
+        { site: data.site, owner_id: context.userId },
+        { onConflict: "owner_id,site", ignoreDuplicates: true },
+      );
     return { id: saved.id };
   });
 
@@ -95,7 +105,11 @@ export const runRecipe = createServerFn({ method: "POST" })
         const root = parse(await response.text());
         for (const field of fields) {
           const node = root.querySelector(field.selector);
-          const value = node ? (field.attr ? node.getAttribute(field.attr) ?? null : node.text.trim() || null) : null;
+          const value = node
+            ? field.attr
+              ? (node.getAttribute(field.attr) ?? null)
+              : node.text.trim() || null
+            : null;
           got[field.name] = value;
         }
       }
@@ -120,13 +134,23 @@ export const runRecipe = createServerFn({ method: "POST" })
           { owner_id: context.userId, site: recipe.site, url: recipe.start_url, data: got as Json },
           { onConflict: "owner_id,url" },
         );
-      if (saveError) throw new Error("The scrape worked, but we couldn't save it. Please try again.");
-      await context.supabase.from("scraper_jobs").update({ last_run_at: now, last_success_at: now })
-        .eq("owner_id", context.userId).eq("site", recipe.site);
-      await context.supabase.from("scraper_recipes").update({ last_run_at: now, last_result: "approved" }).eq("id", recipe.id);
+      if (saveError)
+        throw new Error("The scrape worked, but we couldn't save it. Please try again.");
+      await context.supabase
+        .from("scraper_jobs")
+        .update({ last_run_at: now, last_success_at: now })
+        .eq("owner_id", context.userId)
+        .eq("site", recipe.site);
+      await context.supabase
+        .from("scraper_recipes")
+        .update({ last_run_at: now, last_result: "approved" })
+        .eq("id", recipe.id);
       await logRun("approved");
       await syncSheetForUser(context.userId).catch(() => null);
-      return { outcome: "approved", message: "Every field was found, so it went straight to Approved data." };
+      return {
+        outcome: "approved",
+        message: "Every field was found, so it went straight to Approved data.",
+      };
     }
 
     const { data: caught, error: catchError } = await context.supabase
@@ -144,11 +168,28 @@ export const runRecipe = createServerFn({ method: "POST" })
       .single();
     if (catchError) throw new Error("We couldn't add this to your inbox. Please try again.");
     const { data: job } = await context.supabase
-      .from("scraper_jobs").select("failure_count").eq("owner_id", context.userId).eq("site", recipe.site).maybeSingle();
-    await context.supabase.from("scraper_jobs")
-      .update({ last_run_at: now, last_failure_at: now, failure_count: (job?.failure_count ?? 0) + 1 })
-      .eq("owner_id", context.userId).eq("site", recipe.site);
-    await context.supabase.from("scraper_recipes").update({ last_run_at: now, last_result: "caught" }).eq("id", recipe.id);
+      .from("scraper_jobs")
+      .select("failure_count")
+      .eq("owner_id", context.userId)
+      .eq("site", recipe.site)
+      .maybeSingle();
+    await context.supabase
+      .from("scraper_jobs")
+      .update({
+        last_run_at: now,
+        last_failure_at: now,
+        failure_count: (job?.failure_count ?? 0) + 1,
+      })
+      .eq("owner_id", context.userId)
+      .eq("site", recipe.site);
+    await context.supabase
+      .from("scraper_recipes")
+      .update({ last_run_at: now, last_result: "caught" })
+      .eq("id", recipe.id);
     await logRun("caught");
-    return { outcome: "caught", message: trace ?? "Something needs a quick look.", catchId: caught.id };
+    return {
+      outcome: "caught",
+      message: trace ?? "Something needs a quick look.",
+      catchId: caught.id,
+    };
   });

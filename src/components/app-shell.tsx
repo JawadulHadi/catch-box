@@ -1,6 +1,16 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { Inbox, Database, Radar, Plug, LogOut, Activity, Wrench, BarChart3, Palette } from "lucide-react";
+import {
+  Inbox,
+  Database,
+  Radar,
+  Plug,
+  LogOut,
+  Activity,
+  Wrench,
+  BarChart3,
+  Palette,
+} from "lucide-react";
 import { ThemeToggle } from "@/design-system/catchbox/components/theme-toggle";
 import type { ReactNode } from "react";
 
@@ -59,7 +69,12 @@ export function AppShell({ title, subtitle, actions, children }: AppShellProps) 
           </nav>
           <div className="flex gap-1 lg:mt-8 lg:flex-col">
             <ThemeToggle className="text-muted-foreground lg:w-full lg:justify-start" />
-            <Button asChild variant="ghost" size="sm" className="text-muted-foreground lg:w-full lg:justify-start">
+            <Button
+              asChild
+              variant="ghost"
+              size="sm"
+              className="text-muted-foreground lg:w-full lg:justify-start"
+            >
               <Link to="/showcase">
                 <Palette className="size-4" />
                 Look and feel

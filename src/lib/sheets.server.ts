@@ -34,7 +34,10 @@ async function recordError(userId: string, message: string | null, synced: boole
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   await supabaseAdmin
     .from("sheet_exports")
-    .update({ last_error: message, ...(synced ? { last_synced_at: new Date().toISOString() } : {}) })
+    .update({
+      last_error: message,
+      ...(synced ? { last_synced_at: new Date().toISOString() } : {}),
+    })
     .eq("owner_id", userId);
 }
 
@@ -85,10 +88,9 @@ export async function syncSheetForUser(userId: string): Promise<SyncResult> {
   const columns = [...dataKeys];
   const values: string[][] = [["Site", "Page", "Approved on", ...columns]];
   for (const row of rows ?? []) {
-    const data = (row.data && typeof row.data === "object" && !Array.isArray(row.data) ? row.data : {}) as Record<
-      string,
-      unknown
-    >;
+    const data = (
+      row.data && typeof row.data === "object" && !Array.isArray(row.data) ? row.data : {}
+    ) as Record<string, unknown>;
     values.push([
       row.site,
       row.url,
@@ -98,10 +100,14 @@ export async function syncSheetForUser(userId: string): Promise<SyncResult> {
   }
 
   const range = `'${TAB}'`;
-  const clear = await sheetsCall(key, `/v4/spreadsheets/${sheet.spreadsheet_id}/values/${range}:clear`, {
-    method: "POST",
-    body: "{}",
-  });
+  const clear = await sheetsCall(
+    key,
+    `/v4/spreadsheets/${sheet.spreadsheet_id}/values/${range}:clear`,
+    {
+      method: "POST",
+      body: "{}",
+    },
+  );
   if (await appUserReconnectRequired(clear)) return { status: "reconnect_required" };
   if (!clear.ok) {
     const message = `Couldn't update your sheet [${clear.status}]`;

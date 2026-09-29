@@ -6,9 +6,7 @@
     "framework": "react",
     "css_framework": "tailwind",
     "starter_template": "custom_design_system",
-    "theme_files": [
-      "src/design-system/catchbox/styles.css"
-    ],
+    "theme_files": ["src/design-system/catchbox/styles.css"],
     "source_type": "local",
     "source_manifest": {
       "#enrichment": "15828142fce68372bd2c8f8cc6d6c87d177c508c6831559b19613e53be0f430a",
@@ -398,25 +396,13 @@
         {
           "name": "variant",
           "type": "enum",
-          "values": [
-            "default",
-            "destructive",
-            "outline",
-            "secondary",
-            "ghost",
-            "link"
-          ],
+          "values": ["default", "destructive", "outline", "secondary", "ghost", "link"],
           "default": "default"
         },
         {
           "name": "size",
           "type": "enum",
-          "values": [
-            "default",
-            "sm",
-            "lg",
-            "icon"
-          ],
+          "values": ["default", "sm", "lg", "icon"],
           "default": "default"
         },
         {
@@ -432,9 +418,7 @@
           "code": "<Button variant=\"default\" size=\"sm\">Approve record</Button>"
         }
       ],
-      "antipatterns": [
-        "Do not use a disabled button as the only way to explain an error."
-      ]
+      "antipatterns": ["Do not use a disabled button as the only way to explain an error."]
     },
     {
       "name": "Badge",
@@ -444,12 +428,7 @@
         {
           "name": "variant",
           "type": "enum",
-          "values": [
-            "default",
-            "secondary",
-            "destructive",
-            "outline"
-          ],
+          "values": ["default", "secondary", "destructive", "outline"],
           "default": "default"
         }
       ],
@@ -460,9 +439,7 @@
           "code": "<Badge variant=\"outline\">Needs a look</Badge>"
         }
       ],
-      "antipatterns": [
-        "Do not use a badge as a button or status as color alone."
-      ]
+      "antipatterns": ["Do not use a badge as a button or status as color alone."]
     },
     {
       "name": "Card",
@@ -745,9 +722,7 @@
           "code": "<Progress value={72} aria-label=\"Successful runs\" />"
         }
       ],
-      "antipatterns": [
-        "Do not imply a known percentage for an indeterminate task."
-      ]
+      "antipatterns": ["Do not imply a known percentage for an indeterminate task."]
     },
     {
       "name": "Skeleton",
@@ -790,9 +765,7 @@
           "code": "<ThemeToggle />"
         }
       ],
-      "antipatterns": [
-        "Do not mount more than one theme synchronization hook at a time."
-      ]
+      "antipatterns": ["Do not mount more than one theme synchronization hook at a time."]
     }
   ]
 }

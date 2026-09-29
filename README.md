@@ -6,14 +6,14 @@ Scrapers break quietly: a site changes its layout, throws up a "prove you're hum
 
 ## The screens
 
-| Screen | What it's for |
-| --- | --- |
-| Landing (`/`) | The pitch, plus a preview of what the inbox looks like |
-| Things that need a quick look (`/queue`) | Failed scrapes, newest first, each with a one-line reason |
-| Fix it (`/fix/:id`) | What the scraper got and why it stalled, side by side with a form to fill in the gap. One Approve action |
-| Approved data (`/data`) | Everything checked and safe to use. Searchable, downloadable as CSV |
-| Your scrapers (`/scrapers`) | Sites being watched and how often each runs into trouble |
-| Connect your scraper (`/connect`) | Your personal key and a copy-paste snippet |
+| Screen                                   | What it's for                                                                                            |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Landing (`/`)                            | The pitch, plus a preview of what the inbox looks like                                                   |
+| Things that need a quick look (`/queue`) | Failed scrapes, newest first, each with a one-line reason                                                |
+| Fix it (`/fix/:id`)                      | What the scraper got and why it stalled, side by side with a form to fill in the gap. One Approve action |
+| Approved data (`/data`)                  | Everything checked and safe to use. Searchable, downloadable as CSV                                      |
+| Your scrapers (`/scrapers`)              | Sites being watched and how often each runs into trouble                                                 |
+| Connect your scraper (`/connect`)        | Your personal key and a copy-paste snippet                                                               |
 
 Sign-in is Google only. Every screen except the landing page requires signing in, and all data is private to your account.
 

@@ -96,7 +96,8 @@ export async function suggestMissingValues(input: {
   } catch (error) {
     const status =
       error && typeof error === "object" && "statusCode" in error ? Number(error.statusCode) : 0;
-    if (status === 429) throw new Error("Lovable AI is busy right now. Please try again in a minute.");
+    if (status === 429)
+      throw new Error("Lovable AI is busy right now. Please try again in a minute.");
     if (status === 402 || status === 403)
       throw new Error("Lovable AI credits are used up. Add credits in Settings → Plans & credits.");
     throw new Error("We couldn't get suggestions right now. Please try again.");

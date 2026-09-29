@@ -155,9 +155,7 @@ function Landing() {
                   <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
                     <step.icon className="size-5" />
                   </div>
-                  <p className="mt-5 font-mono text-xs text-muted-foreground">
-                    Step {index + 1}
-                  </p>
+                  <p className="mt-5 font-mono text-xs text-muted-foreground">Step {index + 1}</p>
                   <h3 className="mt-1 text-lg font-semibold">{step.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
                 </Card>

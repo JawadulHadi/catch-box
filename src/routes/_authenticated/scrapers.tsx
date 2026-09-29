@@ -36,7 +36,10 @@ function healthLabel(failures: number): { text: string; className: string } {
   if (failures < 3) {
     return { text: "A few hiccups", className: "border-warning/40 bg-warning/10 text-warning" };
   }
-  return { text: "Needs attention", className: "border-destructive/40 bg-destructive/10 text-destructive" };
+  return {
+    text: "Needs attention",
+    className: "border-destructive/40 bg-destructive/10 text-destructive",
+  };
 }
 
 function ScrapersPage() {

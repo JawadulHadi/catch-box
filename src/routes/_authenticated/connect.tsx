@@ -86,7 +86,8 @@ function ConnectPage() {
     onError: () => toast.error("We couldn't make a new key. Please try again."),
   });
 
-  const origin = typeof window === "undefined" ? "https://your-app.lovable.app" : window.location.origin;
+  const origin =
+    typeof window === "undefined" ? "https://your-app.lovable.app" : window.location.origin;
   const snippet = key ? snippetFor(key, origin) : "";
 
   async function copy(text: string, which: "key" | "snippet") {

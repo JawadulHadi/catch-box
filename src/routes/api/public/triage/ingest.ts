@@ -3,7 +3,6 @@ import { z } from "zod";
 
 import type { Json } from "@/integrations/supabase/types";
 
-
 const payloadSchema = z.object({
   url: z.string().url().max(2000),
   site: z.string().min(1).max(200).optional(),
@@ -89,7 +88,9 @@ export const Route = createFileRoute("/api/public/triage/ingest")({
           });
         }
 
-        await supabaseAdmin.from("scraper_runs").insert({ owner_id: keyRow.owner_id, site, outcome: "caught" });
+        await supabaseAdmin
+          .from("scraper_runs")
+          .insert({ owner_id: keyRow.owner_id, site, outcome: "caught" });
 
         return json({ ok: true, id: inserted.id }, 201);
       },

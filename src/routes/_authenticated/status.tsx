@@ -7,7 +7,8 @@ import { Skeleton } from "@/design-system/catchbox/components/skeleton";
 import { fetchScraperStatus } from "@/lib/catchbox-service";
 import { formatDate, timeAgo } from "@/lib/format";
 
-const description = "Each scraper's last run and how many records it has sent into your Google Sheet.";
+const description =
+  "Each scraper's last run and how many records it has sent into your Google Sheet.";
 
 export const Route = createFileRoute("/_authenticated/status")({
   head: () => ({
@@ -44,19 +45,30 @@ function StatusPage() {
             {data.sheetUrl ? (
               <p>
                 Your Google Sheet was last updated{" "}
-                <span className="font-medium">{data.sheetSyncedAt ? timeAgo(data.sheetSyncedAt) : "not yet"}</span>.{" "}
-                <a href={data.sheetUrl} target="_blank" rel="noreferrer" className="text-primary underline">
+                <span className="font-medium">
+                  {data.sheetSyncedAt ? timeAgo(data.sheetSyncedAt) : "not yet"}
+                </span>
+                .{" "}
+                <a
+                  href={data.sheetUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-primary underline"
+                >
                   Open sheet
                 </a>
               </p>
             ) : (
               <p className="text-muted-foreground">
-                Google Sheets isn't connected yet — the counts below are what will go into it once you connect it on Approved data.
+                Google Sheets isn't connected yet — the counts below are what will go into it once
+                you connect it on Approved data.
               </p>
             )}
           </Card>
           {data.sites.length === 0 ? (
-            <Card className="p-10 text-center text-sm text-muted-foreground">No scrapers have run yet.</Card>
+            <Card className="p-10 text-center text-sm text-muted-foreground">
+              No scrapers have run yet.
+            </Card>
           ) : (
             <Card className="overflow-x-auto p-0">
               <table className="w-full text-sm">

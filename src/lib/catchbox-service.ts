@@ -1,7 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 
-
 export type CatchReason = "page_changed" | "blocked" | "missing_info" | "other";
 export type CatchStatus = "pending" | "resolved" | "discarded";
 
@@ -56,18 +55,24 @@ export async function seedExamples(): Promise<void> {
 export async function fetchCatches(status: CatchStatus = "pending"): Promise<CatchItem[]> {
   const { data, error } = await supabase
     .from("human_triage_queue")
-    .select("id, site, url, error_type, error_trace, raw_payload, missing_fields, status, created_at, resolved_at")
+    .select(
+      "id, site, url, error_type, error_trace, raw_payload, missing_fields, status, created_at, resolved_at",
+    )
     .eq("status", status)
     .order("created_at", { ascending: false });
 
   if (error) throw new Error(error.message);
-  return (data ?? []).map((row) => ({ ...row, raw_payload: asRecord(row.raw_payload) }) as CatchItem);
+  return (data ?? []).map(
+    (row) => ({ ...row, raw_payload: asRecord(row.raw_payload) }) as CatchItem,
+  );
 }
 
 export async function fetchCatch(id: string): Promise<CatchItem | null> {
   const { data, error } = await supabase
     .from("human_triage_queue")
-    .select("id, site, url, error_type, error_trace, raw_payload, missing_fields, status, created_at, resolved_at")
+    .select(
+      "id, site, url, error_type, error_trace, raw_payload, missing_fields, status, created_at, resolved_at",
+    )
     .eq("id", id)
     .maybeSingle();
 
@@ -133,7 +138,12 @@ export async function countPendingCatches(): Promise<number> {
   return count ?? 0;
 }
 
-export type ScraperAlert = { id: string; site: string; failures_in_window: number; created_at: string };
+export type ScraperAlert = {
+  id: string;
+  site: string;
+  failures_in_window: number;
+  created_at: string;
+};
 
 /** Sites that failed 3+ times in the last 24 hours. */
 export async function fetchRecentAlerts(): Promise<ScraperAlert[]> {
@@ -156,9 +166,15 @@ export type ScraperStatus = {
 };
 
 /** Per-site live status: last run and how many approved records (which the sheet mirrors). */
-export async function fetchScraperStatus(): Promise<{ sites: ScraperStatus[]; sheetSyncedAt: string | null; sheetUrl: string | null }> {
+export async function fetchScraperStatus(): Promise<{
+  sites: ScraperStatus[];
+  sheetSyncedAt: string | null;
+  sheetUrl: string | null;
+}> {
   const [jobs, approved, sheet] = await Promise.all([
-    supabase.from("scraper_jobs").select("site, last_run_at, last_success_at, last_failure_at, failure_count"),
+    supabase
+      .from("scraper_jobs")
+      .select("site, last_run_at, last_success_at, last_failure_at, failure_count"),
     supabase.from("scraped_warehouse").select("site, extracted_at"),
     supabase.from("sheet_exports").select("last_synced_at, spreadsheet_url").maybeSingle(),
   ]);
@@ -173,7 +189,9 @@ export async function fetchScraperStatus(): Promise<{ sites: ScraperStatus[]; sh
   }
   const sites = (jobs.data ?? []).map((job) => {
     const c = counts.get(job.site);
-    const candidates = [job.last_run_at, job.last_failure_at, c?.latest ?? null].filter((v): v is string => !!v).sort();
+    const candidates = [job.last_run_at, job.last_failure_at, c?.latest ?? null]
+      .filter((v): v is string => !!v)
+      .sort();
     return {
       site: job.site,
       lastRunAt: candidates.at(-1) ?? null,
@@ -183,7 +201,11 @@ export async function fetchScraperStatus(): Promise<{ sites: ScraperStatus[]; sh
     };
   });
   sites.sort((a, b) => (b.lastRunAt ?? "").localeCompare(a.lastRunAt ?? ""));
-  return { sites, sheetSyncedAt: sheet.data?.last_synced_at ?? null, sheetUrl: sheet.data?.spreadsheet_url ?? null };
+  return {
+    sites,
+    sheetSyncedAt: sheet.data?.last_synced_at ?? null,
+    sheetUrl: sheet.data?.spreadsheet_url ?? null,
+  };
 }
 
 export type Recipe = {
@@ -201,7 +223,10 @@ export async function fetchRecipes(): Promise<Recipe[]> {
     .select("id, site, start_url, fields, last_run_at, last_result")
     .order("created_at", { ascending: false });
   if (error) throw new Error(error.message);
-  return (data ?? []).map((row) => ({ ...row, fields: Array.isArray(row.fields) ? (row.fields as Recipe["fields"]) : [] }));
+  return (data ?? []).map((row) => ({
+    ...row,
+    fields: Array.isArray(row.fields) ? (row.fields as Recipe["fields"]) : [],
+  }));
 }
 
 export async function deleteRecipe(id: string): Promise<void> {
@@ -235,12 +260,17 @@ export async function fetchScraperHistory(): Promise<ScraperHistory[]> {
   if (approved.error) throw new Error(approved.error.message);
 
   const approvedBySite = new Map<string, number>();
-  for (const row of approved.data ?? []) approvedBySite.set(row.site, (approvedBySite.get(row.site) ?? 0) + 1);
+  for (const row of approved.data ?? [])
+    approvedBySite.set(row.site, (approvedBySite.get(row.site) ?? 0) + 1);
 
   const bySite = new Map<string, RunPoint[]>();
   for (const row of runs.data ?? []) {
     const list = bySite.get(row.site) ?? [];
-    list.push({ ranAt: row.ran_at, outcome: row.outcome === "approved" ? "approved" : "caught", durationMs: row.duration_ms });
+    list.push({
+      ranAt: row.ran_at,
+      outcome: row.outcome === "approved" ? "approved" : "caught",
+      durationMs: row.duration_ms,
+    });
     bySite.set(row.site, list);
   }
   const sites = new Set([...bySite.keys(), ...approvedBySite.keys()]);
@@ -249,13 +279,17 @@ export async function fetchScraperHistory(): Promise<ScraperHistory[]> {
     .map((site) => {
       const list = bySite.get(site) ?? [];
       const ok = list.filter((r) => r.outcome === "approved").length;
-      const timed = list.filter((r): r is RunPoint & { durationMs: number } => r.durationMs !== null);
+      const timed = list.filter(
+        (r): r is RunPoint & { durationMs: number } => r.durationMs !== null,
+      );
       return {
         site,
         runs: list,
         totalRuns: list.length,
         successRate: list.length ? ok / list.length : null,
-        avgDurationMs: timed.length ? timed.reduce((s, r) => s + r.durationMs, 0) / timed.length : null,
+        avgDurationMs: timed.length
+          ? timed.reduce((s, r) => s + r.durationMs, 0) / timed.length
+          : null,
         approvedCount: approvedBySite.get(site) ?? 0,
       };
     })

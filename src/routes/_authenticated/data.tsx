@@ -26,7 +26,8 @@ export const Route = createFileRoute("/_authenticated/data")({
       { title: "Approved data — Catchbox" },
       {
         name: "description",
-        content: "Everything that's been checked by a person and is safe to use, ready to download.",
+        content:
+          "Everything that's been checked by a person and is safe to use, ready to download.",
       },
       { property: "og:title", content: "Approved data — Catchbox" },
       {
@@ -132,7 +133,12 @@ function DataPage() {
                   <TableRow key={row.id}>
                     <TableCell className="font-medium">{row.site}</TableCell>
                     <TableCell className="font-mono text-xs text-muted-foreground">
-                      <a href={row.url} target="_blank" rel="noreferrer" className="hover:underline">
+                      <a
+                        href={row.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="hover:underline"
+                      >
                         {shortUrl(row.url)}
                       </a>
                     </TableCell>

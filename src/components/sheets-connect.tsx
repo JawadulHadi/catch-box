@@ -117,7 +117,12 @@ export function SheetsConnect() {
           </Button>
         ) : null}
         {status?.connected ? (
-          <Button variant="ghost" size="sm" onClick={() => unlink.mutate()} disabled={unlink.isPending}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => unlink.mutate()}
+            disabled={unlink.isPending}
+          >
             Disconnect
           </Button>
         ) : (

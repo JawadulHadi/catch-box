@@ -20,7 +20,10 @@ function SheetsReturn() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const notify = (type: "appUserConnectorOAuthComplete" | "appUserConnectorOAuthFailed", code?: string) => {
+    const notify = (
+      type: "appUserConnectorOAuthComplete" | "appUserConnectorOAuthFailed",
+      code?: string,
+    ) => {
       window.opener?.postMessage(
         { type, connectorId: "google_sheets", code: code ?? null },
         window.location.origin,

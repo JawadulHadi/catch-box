@@ -13,7 +13,12 @@ import {
   getConnectionKeyForUser,
   saveConnectionKeyForUser,
 } from "./app-user-connections.server";
-import { GATEWAY_BASE_URL, SHEETS_CONNECTOR, SHEETS_SCOPES, syncSheetForUser } from "./sheets.server";
+import {
+  GATEWAY_BASE_URL,
+  SHEETS_CONNECTOR,
+  SHEETS_SCOPES,
+  syncSheetForUser,
+} from "./sheets.server";
 
 export const getSheetStatus = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -38,7 +43,8 @@ export const startSheetsConnect = createServerFn({ method: "POST" })
     if (!clientKey) throw new Error("Google Sheets isn't set up for this app yet.");
     const request = getRequest();
     const url = new URL(request.url);
-    const sandboxHost = url.hostname === "localhost" ? request.headers.get("x-forwarded-host") : null;
+    const sandboxHost =
+      url.hostname === "localhost" ? request.headers.get("x-forwarded-host") : null;
     const returnUrl = new URL(
       "/oauth/google-sheets/return",
       sandboxHost ? `https://${sandboxHost}` : url.origin,
@@ -60,8 +66,12 @@ export const completeSheetsConnect = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => z.object({ code: z.string().min(1).max(2000) }).parse(data))
   .handler(async ({ data, context }) => {
-    const { connectionAPIKey, connectorId } = await exchangeAppUserOAuthCode(GATEWAY_BASE_URL, data.code);
-    if (connectorId !== SHEETS_CONNECTOR) throw new Error("That sign-in was for a different service.");
+    const { connectionAPIKey, connectorId } = await exchangeAppUserOAuthCode(
+      GATEWAY_BASE_URL,
+      data.code,
+    );
+    if (connectorId !== SHEETS_CONNECTOR)
+      throw new Error("That sign-in was for a different service.");
     await saveConnectionKeyForUser(context.userId, connectorId, connectionAPIKey);
     return syncSheetForUser(context.userId);
   });
@@ -76,7 +86,11 @@ export const disconnectSheets = createServerFn({ method: "POST" })
   .handler(async ({ context }) => {
     const key = await getConnectionKeyForUser(context.userId, SHEETS_CONNECTOR);
     if (key) {
-      await disconnectAppUser({ gatewayBaseUrl: GATEWAY_BASE_URL, connectionAPIKey: key, connectorId: SHEETS_CONNECTOR });
+      await disconnectAppUser({
+        gatewayBaseUrl: GATEWAY_BASE_URL,
+        connectionAPIKey: key,
+        connectorId: SHEETS_CONNECTOR,
+      });
       await deleteConnectionKeyForUser(context.userId, SHEETS_CONNECTOR);
     }
     return { ok: true };
