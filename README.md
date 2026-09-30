@@ -180,22 +180,21 @@ Under the hood, it posts to `POST /api/public/triage/ingest` with an `x-ingest-k
 
 Only `url` is required. `reason` is one of `page_changed`, `blocked`, `missing_info` or `other`, and `site` defaults to the page's host. Every answer is JSON:
 
-| Status | Meaning                                           |
-| ------ | ------------------------------------------------- |
-| 201    | Saved — `{ "ok": true, "id": "…" }`               |
-| 400    | The body isn't valid JSON or doesn't match above  |
-| 401    | The `x-ingest-key` header is missing or not valid |
-| 413    | The body is over 256 KB                           |
-| 500    | Catchbox couldn't save it; try again shortly      |
-| 503    | This Catchbox isn't connected to its database yet |
+| Status | Meaning                                              |
+| ------ | ---------------------------------------------------- |
+| 201    | Saved — `{ "ok": true, "id": "…" }`                  |
+| 400    | The body isn't valid JSON or doesn't match the above |
+| 401    | The `x-ingest-key` header is missing or not valid    |
+| 413    | The body is over 256 KB                              |
+| 500    | Catchbox couldn't save it; try again shortly         |
+| 503    | This Catchbox isn't connected to its database yet    |
 
 _The endpoint works out who the failure belongs to from the key alone — a caller can never claim someone else's account._
 
 ## License
 
-[MIT](./LICENSE) © 2026 Jawad Ul Hadi
-
-<p align="center" style="font-family: system-ui, sans-serif; color: #333; line-height: 1.6;">
+[MIT](./LICENSE) © 2026,
+<p align="left" style="font-family: system-ui, sans-serif; color: #333; line-height: 1.6;">
   Built by <strong>Jawad Ul Hadi</strong> | Backend Lead &amp; Architect — AI-First Systems Design &amp; Generative AI · 
   <a href="https://gravatar.com/juhbukhari" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 500;">Let's Connect</a>
 </p>
