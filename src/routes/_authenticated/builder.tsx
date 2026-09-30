@@ -79,7 +79,14 @@ function BuilderPage() {
     onError: (err) => toast.error(err instanceof Error ? err.message : "The run didn't work."),
   });
 
-  const removeMutation = useMutation({ mutationFn: deleteRecipe, onSuccess: refresh });
+  const removeMutation = useMutation({
+    mutationFn: deleteRecipe,
+    onSuccess: () => {
+      toast.success("Scraper deleted.");
+      refresh();
+    },
+    onError: () => toast.error("We couldn't delete that scraper. Please try again."),
+  });
 
   function updateField(index: number, patch: Partial<FieldDraft>) {
     setFields((prev) => prev.map((f, i) => (i === index ? { ...f, ...patch } : f)));

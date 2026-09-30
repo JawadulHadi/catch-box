@@ -11,12 +11,12 @@ import {
   BarChart3,
   Palette,
 } from "lucide-react";
-import { ThemeToggle } from "@/design-system/catchbox/components/theme-toggle";
 import type { ReactNode } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/design-system/catchbox/components/button";
 import { CatchboxMark } from "@/design-system/catchbox/components/catchbox-mark";
+import { AppearanceMenu } from "@/components/appearance-menu";
 
 const navItems = [
   { to: "/queue", label: "Needs a quick look", icon: Inbox },
@@ -47,8 +47,8 @@ export function AppShell({ title, subtitle, actions, children }: AppShellProps) 
   }
 
   return (
-    <div className="min-h-screen bg-background lg:flex">
-      <aside className="border-b border-border bg-sidebar lg:min-h-screen lg:w-64 lg:shrink-0 lg:border-r lg:border-b-0">
+    <div className="min-h-screen lg:flex">
+      <aside className="glass border-b border-border bg-sidebar lg:min-h-screen lg:w-64 lg:shrink-0 lg:border-r lg:border-b-0">
         <div className="flex items-center justify-between gap-4 px-5 py-4 lg:block">
           <Link to="/queue" className="flex items-center gap-2">
             <CatchboxMark className="size-7" />
@@ -68,7 +68,7 @@ export function AppShell({ title, subtitle, actions, children }: AppShellProps) 
             ))}
           </nav>
           <div className="flex gap-1 lg:mt-8 lg:flex-col">
-            <ThemeToggle className="text-muted-foreground lg:w-full lg:justify-start" />
+            <AppearanceMenu className="text-muted-foreground lg:w-full lg:justify-start" />
             <Button
               asChild
               variant="ghost"

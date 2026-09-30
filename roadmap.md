@@ -9,3 +9,7 @@
 - [ ] Email delivery of scraper alerts — waiting on the owner setting up their email domain
 - [ ] Connect the owner's own scraper script — needs the owner to run the snippet on their machine
 - [x] Reusable Catchbox light/dark design system and theme showcase
+- [x] Glass themes: dark/light × 5 accents × solid/glass, 8 featured combinations, Appearance menu, no flash on load
+- [x] Local setup that works end to end: real lockfile, complete `.env.example`, `check-env`
+- [x] Runs on Vercel + Supabase: cookie sessions, email-link and Google sign-in, no service role key, hashed personal keys, AI suggestions through Vercel AI Gateway, direct Google Sheets OAuth
+- [ ] Custom email sender (SMTP) so sign-in links reach anyone, not only the Supabase team

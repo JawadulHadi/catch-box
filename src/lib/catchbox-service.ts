@@ -117,16 +117,31 @@ export async function fetchScrapers(): Promise<ScraperRow[]> {
   return data ?? [];
 }
 
-export async function fetchIngestKey(): Promise<string> {
-  const { data, error } = await supabase.rpc("ensure_ingest_key", { p_rotate: false });
-  if (error) throw new Error(error.message);
-  return data as string;
+/**
+ * The personal key's state. Only a hash is stored, so `key` is the full key only right
+ * after it's made (first visit or a replacement); afterwards just its prefix is known.
+ */
+export type IngestKeyState = { key: string | null; prefix: string; createdAt: string };
+
+function asKeyState(value: unknown): IngestKeyState {
+  const row = asRecord(value);
+  return {
+    key: typeof row["key"] === "string" ? row["key"] : null,
+    prefix: typeof row["prefix"] === "string" ? row["prefix"] : "cbx_",
+    createdAt: typeof row["created_at"] === "string" ? row["created_at"] : "",
+  };
 }
 
-export async function rotateIngestKey(): Promise<string> {
+export async function fetchIngestKey(): Promise<IngestKeyState> {
+  const { data, error } = await supabase.rpc("ensure_ingest_key", { p_rotate: false });
+  if (error) throw new Error(error.message);
+  return asKeyState(data);
+}
+
+export async function rotateIngestKey(): Promise<IngestKeyState> {
   const { data, error } = await supabase.rpc("ensure_ingest_key", { p_rotate: true });
   if (error) throw new Error(error.message);
-  return data as string;
+  return asKeyState(data);
 }
 
 export async function countPendingCatches(): Promise<number> {

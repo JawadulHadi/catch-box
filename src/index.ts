@@ -30,6 +30,38 @@ export { CatchboxMark } from "./design-system/catchbox/components/catchbox-mark"
 export type { CatchboxMarkProps } from "./design-system/catchbox/components/catchbox-mark";
 export { ThemeToggle } from "./design-system/catchbox/components/theme-toggle";
 export type { ThemeToggleProps } from "./design-system/catchbox/components/theme-toggle";
-export { useThemeStore, useThemeSync } from "./design-system/catchbox/hooks/use-theme";
+export { ThemeScope } from "./design-system/catchbox/components/theme-scope";
+export type { ThemeScopeProps } from "./design-system/catchbox/components/theme-scope";
+export { ThemePreview } from "./design-system/catchbox/components/theme-preview";
+export type { ThemePreviewProps } from "./design-system/catchbox/components/theme-preview";
+export { ThemePicker } from "./design-system/catchbox/components/theme-picker";
+export type { ThemePickerProps } from "./design-system/catchbox/components/theme-picker";
+export {
+  useThemeStore,
+  useThemeSync,
+  useThemeSelection,
+} from "./design-system/catchbox/hooks/use-theme";
 export type { Theme } from "./design-system/catchbox/hooks/use-theme";
+export {
+  applyThemeToElement,
+  defaultThemeSelection,
+  findThemePreset,
+  isSameTheme,
+  readStoredTheme,
+  themeAccents,
+  themeAttributes,
+  themeInitScript,
+  themeModes,
+  themePresets,
+  themeStorageKeys,
+  themeSurfaces,
+  writeStoredTheme,
+} from "./design-system/catchbox/lib/themes";
+export type {
+  ThemeAccent,
+  ThemeMode,
+  ThemePreset,
+  ThemeSelection,
+  ThemeSurface,
+} from "./design-system/catchbox/lib/themes";
 export { cn } from "./design-system/catchbox/lib/utils";

@@ -16,6 +16,10 @@ dist-ssr
 .nitro
 *.local
 
+# Local settings hold secrets such as the service role key; only the template is shared.
+.env
+.env.*
+
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars
@@ -30,3 +34,25 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+.vercel
+
+# Supabase CLI local state
+supabase/.temp
+
+# Agent skills installed locally with `npx skills add` (links into .agents/skills).
+.agents/skills
+.claude/skills
+skills
+skills-lock.json
+.aider-desk
+.augment
+.autohand
+.bob
+.codeartsdoer
+.codebuddy
+.codemaker
+data/skills
+
+# Keep last so the template is shared even though every other .env file is ignored.
+!.env.example

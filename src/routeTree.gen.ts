@@ -20,6 +20,7 @@ import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedQueueRouteImport } from './routes/_authenticated/queue'
 import { Route as AuthenticatedScrapersRouteImport } from './routes/_authenticated/scrapers'
 import { Route as AuthenticatedStatusRouteImport } from './routes/_authenticated/status'
+import { Route as AuthCallbackRouteImport } from './routes/auth_.callback'
 import { Route as AuthenticatedFixIdRouteImport } from './routes/_authenticated/fix.$id'
 import { Route as OauthGoogleSheetsReturnRouteImport } from './routes/oauth/google-sheets/return'
 import { Route as ApiPublicTriageIngestRouteImport } from './routes/api/public/triage/ingest'
@@ -78,6 +79,11 @@ const AuthenticatedStatusRoute = AuthenticatedStatusRouteImport.update({
   path: '/status',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth_/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedFixIdRoute = AuthenticatedFixIdRouteImport.update({
   id: '/fix/$id',
   path: '/fix/$id',
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/queue': typeof AuthenticatedQueueRoute
   '/scrapers': typeof AuthenticatedScrapersRoute
   '/status': typeof AuthenticatedStatusRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/fix/$id': typeof AuthenticatedFixIdRoute
   '/oauth/google-sheets/return': typeof OauthGoogleSheetsReturnRoute
   '/api/public/triage/ingest': typeof ApiPublicTriageIngestRoute
@@ -120,6 +127,7 @@ export interface FileRoutesByTo {
   '/queue': typeof AuthenticatedQueueRoute
   '/scrapers': typeof AuthenticatedScrapersRoute
   '/status': typeof AuthenticatedStatusRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/fix/$id': typeof AuthenticatedFixIdRoute
   '/oauth/google-sheets/return': typeof OauthGoogleSheetsReturnRoute
   '/api/public/triage/ingest': typeof ApiPublicTriageIngestRoute
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   '/_authenticated/queue': typeof AuthenticatedQueueRoute
   '/_authenticated/scrapers': typeof AuthenticatedScrapersRoute
   '/_authenticated/status': typeof AuthenticatedStatusRoute
+  '/auth_/callback': typeof AuthCallbackRoute
   '/_authenticated/fix/$id': typeof AuthenticatedFixIdRoute
   '/oauth/google-sheets/return': typeof OauthGoogleSheetsReturnRoute
   '/api/public/triage/ingest': typeof ApiPublicTriageIngestRoute
@@ -154,6 +163,7 @@ export interface FileRouteTypes {
     | '/queue'
     | '/scrapers'
     | '/status'
+    | '/auth/callback'
     | '/fix/$id'
     | '/oauth/google-sheets/return'
     | '/api/public/triage/ingest'
@@ -169,6 +179,7 @@ export interface FileRouteTypes {
     | '/queue'
     | '/scrapers'
     | '/status'
+    | '/auth/callback'
     | '/fix/$id'
     | '/oauth/google-sheets/return'
     | '/api/public/triage/ingest'
@@ -185,6 +196,7 @@ export interface FileRouteTypes {
     | '/_authenticated/queue'
     | '/_authenticated/scrapers'
     | '/_authenticated/status'
+    | '/auth_/callback'
     | '/_authenticated/fix/$id'
     | '/oauth/google-sheets/return'
     | '/api/public/triage/ingest'
@@ -195,6 +207,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   ShowcaseRoute: typeof ShowcaseRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
   OauthGoogleSheetsReturnRoute: typeof OauthGoogleSheetsReturnRoute
   ApiPublicTriageIngestRoute: typeof ApiPublicTriageIngestRoute
 }
@@ -278,6 +291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedStatusRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/auth_/callback': {
+      id: '/auth_/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/fix/$id': {
       id: '/_authenticated/fix/$id'
       path: '/fix/$id'
@@ -332,6 +352,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   ShowcaseRoute: ShowcaseRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
   OauthGoogleSheetsReturnRoute: OauthGoogleSheetsReturnRoute,
   ApiPublicTriageIngestRoute: ApiPublicTriageIngestRoute,
 }

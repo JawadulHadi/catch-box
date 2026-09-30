@@ -4,6 +4,7 @@ import { parse } from "node-html-parser";
 
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import type { Json } from "@/integrations/supabase/types";
+import { assertPublicUrl, fetchPublicPage } from "./public-fetch.server";
 import { syncSheetForUser } from "./sheets.server";
 
 const fieldSchema = z.object({
@@ -20,29 +21,13 @@ const recipeSchema = z.object({
   fields: z.array(fieldSchema).min(1).max(30),
 });
 
-/** Blocks obvious private or local addresses so recipes can only read public web pages. */
-function isPublicUrl(raw: string): boolean {
-  const url = new URL(raw);
-  if (url.protocol !== "http:" && url.protocol !== "https:") return false;
-  const host = url.hostname.toLowerCase();
-  return !(
-    host === "localhost" ||
-    host.endsWith(".local") ||
-    host.endsWith(".internal") ||
-    /^(127\.|10\.|192\.168\.|169\.254\.|0\.)/.test(host) ||
-    /^172\.(1[6-9]|2\d|3[01])\./.test(host) ||
-    host.includes(":")
-  );
-}
-
 export const saveRecipe = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) =>
     recipeSchema.extend({ id: z.string().uuid().optional() }).parse(data),
   )
   .handler(async ({ data, context }) => {
-    if (!isPublicUrl(data.startUrl))
-      throw new Error("Please use a public web address that starts with http or https.");
+    assertPublicUrl(data.startUrl);
     const row = {
       site: data.site,
       start_url: data.startUrl,
@@ -90,19 +75,15 @@ export const runRecipe = createServerFn({ method: "POST" })
     let trace: string | null = null;
 
     try {
-      if (!isPublicUrl(recipe.start_url)) throw new Error("That address isn't a public web page.");
-      const response = await fetch(recipe.start_url, {
-        headers: { "User-Agent": "CatchboxBot/1.0 (+https://catchbox.app)" },
-        signal: AbortSignal.timeout(15000),
-      });
-      if (response.status === 403 || response.status === 429 || response.status === 503) {
+      const page = await fetchPublicPage(recipe.start_url);
+      if (page.status === 403 || page.status === 429 || page.status === 503) {
         reason = "blocked";
-        trace = `The site answered with ${response.status} — it probably blocked the visit.`;
-      } else if (!response.ok) {
+        trace = `The site answered with ${page.status} — it probably blocked the visit.`;
+      } else if (page.status < 200 || page.status >= 300) {
         reason = "page_changed";
-        trace = `The page answered with ${response.status}.`;
+        trace = `The page answered with ${page.status}.`;
       } else {
-        const root = parse(await response.text());
+        const root = parse(page.html);
         for (const field of fields) {
           const node = root.querySelector(field.selector);
           const value = node
@@ -146,7 +127,7 @@ export const runRecipe = createServerFn({ method: "POST" })
         .update({ last_run_at: now, last_result: "approved" })
         .eq("id", recipe.id);
       await logRun("approved");
-      await syncSheetForUser(context.userId).catch(() => null);
+      await syncSheetForUser(context.supabase, context.userId).catch(() => null);
       return {
         outcome: "approved",
         message: "Every field was found, so it went straight to Approved data.",

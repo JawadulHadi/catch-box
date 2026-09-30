@@ -30,8 +30,11 @@ export function shortUrl(url: string): string {
 }
 
 function escapeCsv(value: unknown): string {
-  const text = value === null || value === undefined ? "" : String(value);
-  return /[",\n;]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+  let text = value === null || value === undefined ? "" : String(value);
+  // Scraped text comes from other people's pages. A cell starting with = + @ (or a
+  // dash not followed by a number) runs as a formula in Excel/Sheets, so defuse it.
+  if (/^[=+@\t\r]|^-(?![\d.,])/.test(text)) text = `'${text}`;
+  return /[",\r\n;]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 }
 
 /** Build a CSV file from rows with a shared set of columns. */
@@ -50,5 +53,6 @@ export function downloadTextFile(filename: string, content: string, mime = "text
   link.href = URL.createObjectURL(blob);
   link.download = filename;
   link.click();
-  URL.revokeObjectURL(link.href);
+  // Revoking in the same tick can cancel the download in some browsers.
+  window.setTimeout(() => URL.revokeObjectURL(link.href), 1000);
 }

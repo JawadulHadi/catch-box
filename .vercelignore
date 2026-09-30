@@ -1,0 +1,20 @@
+# Vercel installs and builds from source; never upload local builds or secrets.
+node_modules
+.output
+.tanstack
+.wrangler
+.env
+.env.*
+!.env.example
+.agents
+.claude
+skills
+skills-lock.json
+.aider-desk
+.augment
+.autohand
+.bob
+.codeartsdoer
+.codebuddy
+.codemaker
+data/skills

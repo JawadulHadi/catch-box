@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { Check } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useCallback } from "react";
@@ -17,10 +18,22 @@ import { Skeleton } from "@/design-system/catchbox/components/skeleton";
 import { Switch } from "@/design-system/catchbox/components/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/design-system/catchbox/components/tabs";
 import { Textarea } from "@/design-system/catchbox/components/textarea";
+import { ThemePicker } from "@/design-system/catchbox/components/theme-picker";
+import { ThemePreview } from "@/design-system/catchbox/components/theme-preview";
+import { ThemeScope } from "@/design-system/catchbox/components/theme-scope";
+import { useThemeSelection, useThemeStore } from "@/design-system/catchbox/hooks/use-theme";
+import {
+  isSameTheme,
+  themeAccents,
+  themeModes,
+  themePresets,
+  themeSurfaces,
+  type ThemeSelection,
+} from "@/design-system/catchbox/lib/themes";
 import { cn } from "@/design-system/catchbox/lib/utils";
 
 const description =
-  "Every color, font and building block Catchbox uses, in both the dark and light themes.";
+  "Every theme, color, font and building block Catchbox uses, in glass and solid, dark and light.";
 
 export const Route = createFileRoute("/showcase")({
   head: () => ({
@@ -61,6 +74,7 @@ const swatches = [
 ] as const;
 
 const sections = [
+  "Themes",
   "Colors",
   "Type",
   "Buttons",
@@ -93,6 +107,170 @@ function Caption({ children }: { children: React.ReactNode }) {
   return <p className="mt-2 font-mono text-xs text-muted-foreground">{children}</p>;
 }
 
+const combinationColumns = themeModes.flatMap((mode) =>
+  themeSurfaces.map((surface) => ({
+    mode: mode.value,
+    surface: surface.value,
+    label: `${mode.label} · ${surface.label}`,
+  })),
+);
+
+function labelOf<T extends string>(list: readonly { value: T; label: string }[], value: T): string {
+  return list.find((item) => item.value === value)?.label ?? value;
+}
+
+function describeTheme(selection: ThemeSelection): string {
+  return [
+    labelOf(themeModes, selection.mode),
+    labelOf(themeAccents, selection.accent),
+    labelOf(themeSurfaces, selection.surface),
+  ].join(" · ");
+}
+
+const scopeExample = `<html class="dark" data-accent="blue" data-surface="glass">
+
+<ThemeScope mode="light" accent="magenta" surface="glass">
+  …
+</ThemeScope>`;
+
+function ThemesGallery() {
+  const current = useThemeSelection();
+  const setSelection = useThemeStore((s) => s.setSelection);
+  const total = themeModes.length * themeAccents.length * themeSurfaces.length;
+
+  return (
+    <div>
+      <p className="max-w-2xl text-sm text-muted-foreground">
+        A theme is a mode, an accent and a surface. They combine freely — {total} looks in all. Pick
+        any preview to use it; your choice is saved on this device. Approved, warning and error
+        colors stay the same in every theme, so a color never changes what a result means.
+      </p>
+
+      <h3 className="mt-8 font-display text-lg font-semibold">Featured</h3>
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
+        {themePresets.map((preset) => {
+          const active = isSameTheme(preset, current);
+          return (
+            <button
+              key={preset.id}
+              type="button"
+              aria-pressed={active}
+              onClick={() => setSelection(preset)}
+              className={cn(
+                "glass flex cursor-pointer flex-col rounded-xl border border-border bg-card p-2 text-left outline-none transition-colors hover:border-primary/50 focus-visible:ring-2 focus-visible:ring-ring",
+                active && "border-primary ring-1 ring-primary",
+              )}
+            >
+              <ThemePreview
+                mode={preset.mode}
+                accent={preset.accent}
+                surface={preset.surface}
+                className="h-20 w-full sm:h-28"
+              />
+              <span className="flex items-start justify-between gap-2 px-1 pt-3">
+                <span className="font-medium">{preset.name}</span>
+                {active ? (
+                  <span className="inline-flex shrink-0 items-center gap-1 pt-0.5 text-xs font-medium whitespace-nowrap text-primary">
+                    <Check className="size-3.5" aria-hidden="true" />
+                    In use
+                  </span>
+                ) : null}
+              </span>
+              <span className="mt-1 block px-1 text-xs text-muted-foreground">
+                {preset.description}
+              </span>
+              <span className="mt-2 block px-1 pb-1 font-mono text-[11px] text-muted-foreground">
+                {describeTheme(preset)}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <h3 className="mt-10 font-display text-lg font-semibold">Every combination</h3>
+      <div className="mt-4 overflow-x-auto pb-2">
+        <table className="w-full min-w-[40rem] border-separate border-spacing-2">
+          <caption className="sr-only">
+            Every theme: accents down the side, mode and surface across the top
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col" className="w-24 text-left text-xs font-medium text-muted-foreground">
+                Accent
+              </th>
+              {combinationColumns.map((column) => (
+                <th
+                  key={column.label}
+                  scope="col"
+                  className="text-left text-xs font-medium text-muted-foreground"
+                >
+                  {column.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {themeAccents.map((accent) => (
+              <tr key={accent.value}>
+                <th scope="row" className="text-left text-sm font-medium">
+                  {accent.label}
+                </th>
+                {combinationColumns.map((column) => {
+                  const selection: ThemeSelection = {
+                    mode: column.mode,
+                    accent: accent.value,
+                    surface: column.surface,
+                  };
+                  const active = isSameTheme(selection, current);
+                  return (
+                    <td key={column.label}>
+                      <button
+                        type="button"
+                        aria-pressed={active}
+                        aria-label={`Use ${describeTheme(selection)}`}
+                        onClick={() => setSelection(selection)}
+                        className={cn(
+                          "block w-full cursor-pointer rounded-lg p-0.5 outline-none transition-shadow hover:ring-1 hover:ring-primary/60 focus-visible:ring-2 focus-visible:ring-ring",
+                          active && "ring-2 ring-primary",
+                        )}
+                      >
+                        <ThemePreview {...selection} className="h-20 w-full" />
+                      </button>
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 className="mt-10 font-display text-lg font-semibold">Mix your own</h3>
+      <div className="mt-4 grid gap-6 lg:grid-cols-[20rem_minmax(0,1fr)]">
+        <Card className="p-5">
+          <ThemePicker presets={[]} />
+        </Card>
+        <div className="min-w-0 space-y-3 text-sm text-muted-foreground">
+          <p>
+            In use: <span className="font-medium text-foreground">{describeTheme(current)}</span>
+          </p>
+          <p>
+            Put a theme on any element with a mode class and two data attributes. Children follow
+            it, so you can preview one theme inside another.
+          </p>
+          <pre className="overflow-x-auto rounded-lg bg-muted p-4 font-mono text-xs text-foreground">
+            <code>{scopeExample}</code>
+          </pre>
+          <p>
+            In glass themes, panels frost what's behind them. <code>Card</code> does it for you; for
+            your own panels, pair <code>bg-card</code> with the <code>glass</code> utility.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ShowcasePage() {
   const [filter, setFilter] = useState("");
   const shown = sections.filter((s) => s.toLowerCase().includes(filter.toLowerCase()));
@@ -113,6 +291,9 @@ function ShowcasePage() {
     "Skeleton",
     "CatchboxMark",
     "ThemeToggle",
+    "ThemePicker",
+    "ThemeScope",
+    "ThemePreview",
   ] as const;
   const [componentFilter, setComponentFilter] = useState("");
   const componentExamples: Record<string, string> = {
@@ -130,6 +311,9 @@ function ShowcasePage() {
     Skeleton: `<Skeleton className="h-12 w-full" />`,
     CatchboxMark: `<CatchboxMark className="size-8" />`,
     ThemeToggle: `<ThemeToggle />`,
+    ThemePicker: `<ThemePicker />`,
+    ThemeScope: `<ThemeScope mode="light" accent="blue" surface="glass">…</ThemeScope>`,
+    ThemePreview: `<ThemePreview mode="dark" accent="violet" surface="glass" className="h-24" />`,
   };
   const selectComponent = useCallback((name: string) => {
     setActiveComponent(name);
@@ -137,8 +321,8 @@ function ShowcasePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background lg:flex">
-      <aside className="border-b border-border bg-sidebar p-5 lg:sticky lg:top-0 lg:h-screen lg:w-60 lg:shrink-0 lg:border-r lg:border-b-0">
+    <div className="min-h-screen lg:flex">
+      <aside className="glass border-b border-border bg-sidebar p-5 lg:sticky lg:top-0 lg:h-screen lg:w-60 lg:shrink-0 lg:border-r lg:border-b-0">
         <Link to="/queue" className="flex items-center gap-2">
           <CatchboxMark className="size-7" />
           <span className="font-display text-lg font-semibold">Catchbox</span>
@@ -170,8 +354,12 @@ function ShowcasePage() {
           Calm, warm, and quick to read.
         </h1>
         <p className="mt-3 max-w-2xl text-muted-foreground">
-          {description} Flip the theme in the sidebar to check both.
+          {description} Switch themes under Themes, or flip light and dark from the sidebar.
         </p>
+
+        <Section id="Themes" title="Themes">
+          <ThemesGallery />
+        </Section>
 
         <Section id="Colors" title="Colors">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -418,6 +606,32 @@ function ShowcasePage() {
                 {activeComponent === "Skeleton" && <Skeleton className="h-12 w-full" />}
                 {activeComponent === "CatchboxMark" && <CatchboxMark className="size-9" />}
                 {activeComponent === "ThemeToggle" && <ThemeToggle />}
+                {activeComponent === "ThemePicker" && (
+                  <Card className="w-full max-w-xs p-4">
+                    <ThemePicker presets={themePresets.slice(0, 4)} />
+                  </Card>
+                )}
+                {activeComponent === "ThemeScope" && (
+                  <ThemeScope
+                    mode="light"
+                    accent="blue"
+                    surface="glass"
+                    className="w-full rounded-xl border border-border p-6"
+                  >
+                    <Card className="max-w-sm p-5">
+                      <p className="font-display font-semibold">Blue Mug Shop</p>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        Always light, blue and glass, whatever the page uses.
+                      </p>
+                      <Button size="sm" className="mt-4">
+                        Approve record
+                      </Button>
+                    </Card>
+                  </ThemeScope>
+                )}
+                {activeComponent === "ThemePreview" && (
+                  <ThemePreview mode="dark" accent="violet" surface="glass" className="h-24 w-44" />
+                )}
               </div>
               <Button
                 variant="ghost"

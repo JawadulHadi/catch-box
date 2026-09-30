@@ -5,6 +5,7 @@ import { Button } from "@/design-system/catchbox/components/button";
 import { Card } from "@/design-system/catchbox/components/card";
 import { Badge } from "@/design-system/catchbox/components/badge";
 import { CatchboxMark } from "@/design-system/catchbox/components/catchbox-mark";
+import { AppearanceMenu } from "@/components/appearance-menu";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -69,15 +70,18 @@ const steps = [
 
 function Landing() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-5 py-6 lg:px-10">
         <div className="flex items-center gap-2">
           <CatchboxMark className="size-7" />
           <span className="font-display text-lg font-semibold">Catchbox</span>
         </div>
-        <Button asChild variant="ghost" size="sm">
-          <Link to="/auth">Sign in</Link>
-        </Button>
+        <div className="flex items-center gap-1">
+          <AppearanceMenu align="end" className="text-muted-foreground" />
+          <Button asChild variant="ghost" size="sm">
+            <Link to="/auth">Sign in</Link>
+          </Button>
+        </div>
       </header>
 
       <main>
@@ -146,7 +150,7 @@ function Landing() {
           </Card>
         </section>
 
-        <section className="border-t border-border bg-sidebar">
+        <section className="glass border-t border-border bg-sidebar">
           <div className="mx-auto max-w-6xl px-5 py-16 lg:px-10">
             <h2 className="text-2xl font-semibold lg:text-3xl">How it works</h2>
             <div className="mt-10 grid gap-6 md:grid-cols-3">
