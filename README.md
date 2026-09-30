@@ -24,7 +24,7 @@ bun install
 bun run dev
 ```
 
-The app runs at http://localhost:8080. Environment values for the database and auth are already in `.env`; nothing else to configure.
+The app runs at http://localhost:8080. Database and auth environment variables are already in `.env`; no other configuration is needed.
 
 Other commands:
 
@@ -52,4 +52,8 @@ Under the hood, it posts to `POST /api/public/triage/ingest` with an `x-ingest-k
 }
 ```
 
-_The endpoint works out who the failure belongs to from the key alone — a caller can never claim someone else's account_
+<p align="center" style="font-family: system-ui, sans-serif; color: #333; line-height: 1.6;">
+  Built by <strong>Jawad Ul Hadi</strong> | Backend Lead &amp; Architect — AI-First Systems Design &amp; Generative AI · 
+  <a href="https://gravatar.com/juhbukhari" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none; font-weight: 500;">Let's Connect</a>
+</p>
+
