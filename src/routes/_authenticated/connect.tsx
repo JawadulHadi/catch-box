@@ -1,13 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { Check, Copy, Eye, EyeOff, RefreshCw } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Check, Copy, Eye, EyeOff, KeyRound, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 
 import { AppShell } from "@/components/app-shell";
 import { Card } from "@/design-system/catchbox/components/card";
 import { Button } from "@/design-system/catchbox/components/button";
 import { Skeleton } from "@/design-system/catchbox/components/skeleton";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { fetchIngestKey, rotateIngestKey } from "@/lib/catchbox-service";
 
 export const Route = createFileRoute("/_authenticated/connect")({
@@ -71,27 +82,36 @@ function ConnectPage() {
   const [revealed, setRevealed] = useState(false);
   const [copied, setCopied] = useState<"key" | "snippet" | null>(null);
 
-  const { data: key, isPending } = useQuery({
+  const { data: keyState, isPending } = useQuery({
     queryKey: ["ingest-key"],
     queryFn: fetchIngestKey,
+    // A new key is only ever returned once, so keep it on screen for this visit.
+    staleTime: Infinity,
   });
+  const key = keyState?.key ?? null;
 
   const rotate = useMutation({
     mutationFn: rotateIngestKey,
-    onSuccess: (newKey) => {
-      queryClient.setQueryData(["ingest-key"], newKey);
+    onSuccess: (state) => {
+      queryClient.setQueryData(["ingest-key"], state);
       setRevealed(true);
-      toast.success("New key ready. Paste it into your script to keep sending.");
+      toast.success("New key ready. Copy it now, then paste it into your script.");
     },
     onError: () => toast.error("We couldn't make a new key. Please try again."),
   });
 
-  const origin =
-    typeof window === "undefined" ? "https://your-app.lovable.app" : window.location.origin;
-  const snippet = key ? snippetFor(key, origin) : "";
+  // Set after mount so the server and browser render the same snippet.
+  const [origin, setOrigin] = useState("https://your-catchbox-address");
+  useEffect(() => setOrigin(window.location.origin), []);
+  const snippet = snippetFor(key ?? "PASTE_YOUR_KEY_HERE", origin);
 
   async function copy(text: string, which: "key" | "snippet") {
-    await navigator.clipboard.writeText(text);
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      toast.error("Your browser blocked copying. Select the text and copy it by hand.");
+      return;
+    }
     setCopied(which);
     toast.success(which === "key" ? "Key copied" : "Snippet copied");
     window.setTimeout(() => setCopied(null), 1500);
@@ -115,26 +135,66 @@ function ConnectPage() {
           ) : (
             <div className="mt-5 flex flex-wrap items-center gap-2">
               <code className="min-w-0 flex-1 truncate rounded-lg bg-surface px-4 py-3 font-mono text-sm">
-                {revealed ? key : "cbx_" + "•".repeat(32)}
+                {key && revealed
+                  ? key
+                  : `${keyState?.prefix ?? "cbx_"}${"•".repeat(key ? 42 : 12)}`}
               </code>
-              <Button variant="outline" size="icon" onClick={() => setRevealed((value) => !value)}>
-                {revealed ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-                <span className="sr-only">{revealed ? "Hide key" : "Show key"}</span>
-              </Button>
-              <Button variant="outline" onClick={() => copy(key ?? "", "key")}>
-                {copied === "key" ? <Check className="size-4" /> : <Copy className="size-4" />}
-                Copy
-              </Button>
-              <Button
-                variant="ghost"
-                onClick={() => rotate.mutate()}
-                disabled={rotate.isPending}
-                className="text-muted-foreground"
-              >
-                <RefreshCw className="size-4" />
-                Replace key
-              </Button>
+              {key ? (
+                <>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setRevealed((value) => !value)}
+                  >
+                    {revealed ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                    <span className="sr-only">{revealed ? "Hide key" : "Show key"}</span>
+                  </Button>
+                  <Button variant="outline" onClick={() => copy(key, "key")}>
+                    {copied === "key" ? <Check className="size-4" /> : <Copy className="size-4" />}
+                    Copy
+                  </Button>
+                </>
+              ) : null}
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    disabled={rotate.isPending}
+                    className="text-muted-foreground"
+                  >
+                    <RefreshCw className="size-4" />
+                    {rotate.isPending ? "Replacing…" : "Replace key"}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Replace your key?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Your current key stops working straight away. Any scraper still using it can't
+                      send catches until you paste in the new one.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Keep current key</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => rotate.mutate()}>
+                      Replace key
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
+          )}
+          {isPending ? null : key ? (
+            <p className="mt-3 flex items-start gap-2 text-sm text-warning">
+              <KeyRound className="mt-0.5 size-4 shrink-0" />
+              Copy it now. Catchbox keeps only a fingerprint of your key, so it can't show it again
+              after you leave this page.
+            </p>
+          ) : (
+            <p className="mt-3 text-sm text-muted-foreground">
+              For your safety Catchbox keeps only a fingerprint of your key, so it can't be shown
+              again. Lost it? Replace it and paste the new one into your script.
+            </p>
           )}
         </Card>
 
@@ -147,7 +207,7 @@ function ConnectPage() {
                 half-empty data, call <code className="font-mono text-xs">catch(...)</code> instead.
               </p>
             </div>
-            <Button variant="outline" onClick={() => copy(snippet, "snippet")} disabled={!key}>
+            <Button variant="outline" onClick={() => copy(snippet, "snippet")} disabled={isPending}>
               {copied === "snippet" ? <Check className="size-4" /> : <Copy className="size-4" />}
               Copy snippet
             </Button>

@@ -1,1 +1,9 @@
-project_id = "kxhtwldlvfspzkhzmekv"
+project_id = "xdoofqcilrozsiwxmomw"
+
+[auth]
+site_url = "https://catch-box.vercel.app"
+additional_redirect_urls = [
+  "https://catch-box.vercel.app/**",
+  "https://catch-box-*-jawadulhadis-projects.vercel.app/**",
+  "http://localhost:8080/**",
+]

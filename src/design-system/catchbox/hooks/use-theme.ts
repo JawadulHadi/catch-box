@@ -1,29 +1,84 @@
 import { useEffect } from "react";
 import { create } from "zustand";
 
-export type Theme = "dark" | "light";
+import {
+  applyThemeToElement,
+  defaultThemeSelection,
+  readStoredTheme,
+  writeStoredTheme,
+  type ThemeAccent,
+  type ThemeMode,
+  type ThemeSelection,
+  type ThemeSurface,
+} from "../lib/themes";
 
-type ThemeState = { theme: Theme; setTheme: (theme: Theme) => void };
+/** Light or dark. Kept as `Theme` for existing consumers; see `ThemeSelection` for the full choice. */
+export type Theme = ThemeMode;
 
-const storageKey = "catchbox-theme";
+type ThemeState = {
+  /** The mode, named `theme` for backward compatibility. */
+  theme: ThemeMode;
+  accent: ThemeAccent;
+  surface: ThemeSurface;
+  /** False until the saved theme has been read after hydration. */
+  hydrated: boolean;
+  setTheme: (theme: ThemeMode) => void;
+  setAccent: (accent: ThemeAccent) => void;
+  setSurface: (surface: ThemeSurface) => void;
+  setSelection: (selection: ThemeSelection) => void;
+};
 
-export const useThemeStore = create<ThemeState>((set) => ({
-  theme: "dark",
-  setTheme: (theme) => {
-    window.localStorage.setItem(storageKey, theme);
-    set({ theme });
-  },
-}));
+function selectionOf(state: Pick<ThemeState, "theme" | "accent" | "surface">): ThemeSelection {
+  return { mode: state.theme, accent: state.accent, surface: state.surface };
+}
 
-/** Reads the saved theme after hydration and keeps the page's class in sync. */
+export const useThemeStore = create<ThemeState>((set, get) => {
+  function update(next: ThemeSelection) {
+    writeStoredTheme(next);
+    set({ theme: next.mode, accent: next.accent, surface: next.surface });
+  }
+  return {
+    theme: defaultThemeSelection.mode,
+    accent: defaultThemeSelection.accent,
+    surface: defaultThemeSelection.surface,
+    hydrated: false,
+    setTheme: (theme) => update({ ...selectionOf(get()), mode: theme }),
+    setAccent: (accent) => update({ ...selectionOf(get()), accent }),
+    setSurface: (surface) => update({ ...selectionOf(get()), surface }),
+    setSelection: (selection) => update(selection),
+  };
+});
+
+/** The current theme as one object. */
+export function useThemeSelection(): ThemeSelection {
+  const mode = useThemeStore((s) => s.theme);
+  const accent = useThemeStore((s) => s.accent);
+  const surface = useThemeStore((s) => s.surface);
+  return { mode, accent, surface };
+}
+
+/**
+ * Mount once in a client-rendered root. Reads the saved theme after hydration and
+ * keeps the document root's class and data attributes in sync with the store.
+ */
 export function useThemeSync(): void {
-  const theme = useThemeStore((s) => s.theme);
+  const { mode, accent, surface } = useThemeSelection();
+  const hydrated = useThemeStore((s) => s.hydrated);
+
   useEffect(() => {
-    const saved = window.localStorage.getItem(storageKey);
-    if (saved === "light" || saved === "dark") useThemeStore.setState({ theme: saved });
+    const saved = readStoredTheme();
+    useThemeStore.setState({
+      theme: saved.mode,
+      accent: saved.accent,
+      surface: saved.surface,
+      hydrated: true,
+    });
   }, []);
+
   useEffect(() => {
-    document.documentElement.classList.toggle("light", theme === "light");
-    document.documentElement.classList.toggle("dark", theme === "dark");
-  }, [theme]);
+    // Before hydration the store still holds the defaults; applying them would undo
+    // whatever `themeInitScript` already put on the page.
+    if (!hydrated) return;
+    applyThemeToElement(document.documentElement, { mode, accent, surface });
+  }, [hydrated, mode, accent, surface]);
 }

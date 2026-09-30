@@ -215,7 +215,7 @@ function FixPage() {
             <div className="mt-6 rounded-lg border border-border bg-surface p-4">
               <Label htmlFor="page-text" className="flex items-center gap-2">
                 <Sparkles className="size-4 text-primary" />
-                Ask Lovable AI for help
+                Ask AI for help
               </Label>
               <p className="mt-1 text-xs text-muted-foreground">
                 Paste any text you copied from the page. We'll suggest the missing values, show

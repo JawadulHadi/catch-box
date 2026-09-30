@@ -12,27 +12,26 @@ import {
   getSheetStatus,
   startSheetsConnect,
 } from "@/lib/sheets.functions";
+import type { SheetsOAuthMessage } from "@/routes/oauth/google-sheets/return";
 
-function waitForPopup(popup: Window): Promise<string | null> {
+function waitForPopup(popup: Window): Promise<{ code: string; state: string }> {
   return new Promise((resolve, reject) => {
     const cleanup = () => {
       window.removeEventListener("message", onMessage);
       window.clearInterval(poll);
     };
-    const onMessage = (event: MessageEvent) => {
-      const type = event.data?.type;
+    const onMessage = (event: MessageEvent<SheetsOAuthMessage>) => {
       if (
         event.origin !== window.location.origin ||
         event.source !== popup ||
-        event.data?.connectorId !== "google_sheets"
+        event.data?.type !== "catchbox:sheets-oauth"
       )
         return;
       cleanup();
-      if (type === "appUserConnectorOAuthComplete") {
-        resolve(typeof event.data?.code === "string" ? event.data.code : null);
-      } else {
+      if (event.data.ok) resolve({ code: event.data.code, state: event.data.state });
+      else {
         popup.close();
-        reject(new Error("Google didn't finish connecting."));
+        reject(new Error(event.data.error));
       }
     };
     window.addEventListener("message", onMessage);
@@ -57,18 +56,17 @@ export function SheetsConnect() {
     mutationFn: async () => {
       const popup = window.open("", "catchbox-google", "width=600,height=720");
       if (!popup) throw new Error("Your browser blocked the pop-up. Allow pop-ups and try again.");
-      let code: string | null;
+      let result: { code: string; state: string };
       try {
         const { authorizationUrl } = await start();
         const done = waitForPopup(popup);
         popup.location.href = authorizationUrl;
-        code = await done;
+        result = await done;
       } catch (error) {
         popup.close();
         throw error;
       }
-      if (!code) throw new Error("Google didn't send back what we needed.");
-      return complete({ data: { code } });
+      return complete({ data: result });
     },
     onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ["sheet-status"] });
@@ -97,13 +95,15 @@ export function SheetsConnect() {
         <div>
           <h2 className="text-sm font-semibold">Live Google Sheet</h2>
           <p className="text-sm text-muted-foreground">
-            {status?.connected
-              ? status.lastError
-                ? "Last update didn't go through — it'll try again on your next approval."
-                : status.lastSyncedAt
-                  ? `Updates every time you approve. Last updated ${formatDate(status.lastSyncedAt)}.`
-                  : "Connected. Your sheet updates every time you approve."
-              : "Connect your Google account and every approval lands in your own sheet automatically."}
+            {status && !status.available
+              ? "Google Sheets isn't set up on this server yet. Everything else works; CSV download is always available."
+              : status?.connected
+                ? status.lastError
+                  ? "Last update didn't go through — it'll try again on your next approval."
+                  : status.lastSyncedAt
+                    ? `Updates every time you approve. Last updated ${formatDate(status.lastSyncedAt)}.`
+                    : "Connected. Your sheet updates every time you approve."
+                : "Connect your Google account and every approval lands in your own sheet automatically."}
           </p>
         </div>
       </div>
@@ -125,8 +125,12 @@ export function SheetsConnect() {
           >
             Disconnect
           </Button>
-        ) : (
-          <Button size="sm" onClick={() => connect.mutate()} disabled={connect.isPending}>
+        ) : status?.available === false ? null : (
+          <Button
+            size="sm"
+            onClick={() => connect.mutate()}
+            disabled={connect.isPending || !status}
+          >
             {connect.isPending ? "Connecting…" : "Connect Google Sheets"}
           </Button>
         )}

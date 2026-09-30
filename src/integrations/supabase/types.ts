@@ -4,37 +4,10 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5";
+    PostgrestVersion: "14.18";
   };
   public: {
     Tables: {
-      app_user_connections: {
-        Row: {
-          connection_key_ciphertext: string;
-          connector_id: string;
-          created_at: string;
-          id: string;
-          updated_at: string;
-          user_id: string;
-        };
-        Insert: {
-          connection_key_ciphertext: string;
-          connector_id: string;
-          created_at?: string;
-          id?: string;
-          updated_at?: string;
-          user_id: string;
-        };
-        Update: {
-          connection_key_ciphertext?: string;
-          connector_id?: string;
-          created_at?: string;
-          id?: string;
-          updated_at?: string;
-          user_id?: string;
-        };
-        Relationships: [];
-      };
       human_triage_queue: {
         Row: {
           created_at: string;
@@ -80,24 +53,48 @@ export type Database = {
       ingest_keys: {
         Row: {
           created_at: string;
-          id: string;
-          key: string;
+          key_hash: string;
+          key_prefix: string;
           owner_id: string;
           rotated_at: string | null;
         };
         Insert: {
           created_at?: string;
-          id?: string;
-          key: string;
+          key_hash: string;
+          key_prefix: string;
           owner_id?: string;
           rotated_at?: string | null;
         };
         Update: {
           created_at?: string;
-          id?: string;
-          key?: string;
+          key_hash?: string;
+          key_prefix?: string;
           owner_id?: string;
           rotated_at?: string | null;
+        };
+        Relationships: [];
+      };
+      oauth_connections: {
+        Row: {
+          created_at: string;
+          owner_id: string;
+          provider: string;
+          refresh_token_ciphertext: string;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          owner_id?: string;
+          provider: string;
+          refresh_token_ciphertext: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          owner_id?: string;
+          provider?: string;
+          refresh_token_ciphertext?: string;
+          updated_at?: string;
         };
         Relationships: [];
       };
@@ -270,7 +267,7 @@ export type Database = {
           created_at?: string;
           last_error?: string | null;
           last_synced_at?: string | null;
-          owner_id: string;
+          owner_id?: string;
           spreadsheet_id: string;
           spreadsheet_url: string;
         };
@@ -289,7 +286,19 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      ensure_ingest_key: { Args: { p_rotate?: boolean }; Returns: string };
+      ensure_ingest_key: { Args: { p_rotate?: boolean }; Returns: Json };
+      ingest_catch: {
+        Args: {
+          p_error?: string;
+          p_got?: Json;
+          p_key: string;
+          p_missing?: string[];
+          p_reason?: Database["public"]["Enums"]["catch_reason"];
+          p_site?: string;
+          p_url: string;
+        };
+        Returns: string;
+      };
       promote_triage_record: {
         Args: { p_data: Json; p_record_id: string };
         Returns: string;

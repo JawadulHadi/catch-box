@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Download, Search } from "lucide-react";
+import { ArrowDownWideNarrow, ArrowUpNarrowWide, Download, Search } from "lucide-react";
 
 import { AppShell } from "@/components/app-shell";
 import { Card } from "@/design-system/catchbox/components/card";
@@ -43,6 +43,7 @@ export const Route = createFileRoute("/_authenticated/data")({
 
 function DataPage() {
   const [search, setSearch] = useState("");
+  const [newestFirst, setNewestFirst] = useState(true);
   const { data, isPending, error } = useQuery({
     queryKey: ["approved"],
     queryFn: fetchApproved,
@@ -51,11 +52,18 @@ function DataPage() {
   const rows = useMemo(() => {
     const term = search.trim().toLowerCase();
     if (!data) return [];
-    if (!term) return data;
-    return data.filter((row) =>
-      `${row.site} ${row.url} ${JSON.stringify(row.data)}`.toLowerCase().includes(term),
+    const matching = term
+      ? data.filter((row) =>
+          `${row.site} ${row.url} ${JSON.stringify(row.data)}`.toLowerCase().includes(term),
+        )
+      : [...data];
+    // ISO timestamps sort correctly as strings.
+    return matching.sort((a, b) =>
+      newestFirst
+        ? b.extracted_at.localeCompare(a.extracted_at)
+        : a.extracted_at.localeCompare(b.extracted_at),
     );
-  }, [data, search]);
+  }, [data, search, newestFirst]);
 
   const columns = useMemo(() => {
     const keys = new Set<string>();
@@ -125,7 +133,25 @@ function DataPage() {
                   {columns.map((column) => (
                     <TableHead key={column}>{column.replace(/[_-]+/g, " ")}</TableHead>
                   ))}
-                  <TableHead>Approved on</TableHead>
+                  <TableHead aria-sort={newestFirst ? "descending" : "ascending"}>
+                    <button
+                      type="button"
+                      onClick={() => setNewestFirst((value) => !value)}
+                      className="inline-flex cursor-pointer items-center gap-1 rounded-sm whitespace-nowrap hover:text-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none"
+                    >
+                      Approved on
+                      {newestFirst ? (
+                        <ArrowDownWideNarrow className="size-3.5" aria-hidden="true" />
+                      ) : (
+                        <ArrowUpNarrowWide className="size-3.5" aria-hidden="true" />
+                      )}
+                      <span className="sr-only">
+                        {newestFirst
+                          ? ", newest first. Show oldest first"
+                          : ", oldest first. Show newest first"}
+                      </span>
+                    </button>
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -163,7 +189,8 @@ function DataPage() {
             </Table>
           </div>
           <div className="border-t border-border bg-surface px-5 py-3 text-xs text-muted-foreground">
-            {rows.length} {rows.length === 1 ? "record" : "records"}
+            {rows.length} {rows.length === 1 ? "record" : "records"} ·{" "}
+            {newestFirst ? "newest first" : "oldest first"}
           </div>
         </Card>
       )}

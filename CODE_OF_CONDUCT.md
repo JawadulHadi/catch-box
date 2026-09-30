@@ -20,7 +20,7 @@ We want Catchbox to be a friendly place to work on, whoever you are. We promise 
 
 ## Reporting a problem
 
-If something happens that makes you uncomfortable, email the maintainers at conduct@catchbox.app. Every report is read, kept private, and answered quickly.
+If something happens that makes you uncomfortable, email the maintainer, Jawad Ul Hadi, at jawadulhadicc@gmail.com. Every report is read, kept private, and answered quickly.
 
 ## What happens next
 

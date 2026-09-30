@@ -1,16 +1,8 @@
-<!-- LOVABLE:BEGIN -->
-
-> [!IMPORTANT]
-> This project is connected to [Lovable](https://lovable.dev). Avoid rewriting
-> published git history — force pushing, or rebasing/amending/squashing commits
-> that are already pushed — as it rewrites history on Lovable's side and the
-> user will likely lose their project history.
->
-> Commits you push to the connected branch sync back to Lovable and show up in
-> the editor, so keep the branch in a working state.
-
-<!-- LOVABLE:END -->
+# Notes for coding agents
 
 - Keep the reusable Catchbox design system self-contained under `src/design-system/catchbox/` and re-export it from `src/index.ts`; attached projects copy only this source subtree.
 - Use `src/design-system/catchbox/styles.css` as the canonical Tailwind v4 theme entry; the app stylesheet imports it so preview and consumers share one source of truth.
 - Keep Catchbox product routes, backend integrations, and app-only components outside the library barrel; attached projects must not inherit product behavior.
+- The app has no Supabase service role key. Server code acts as the signed-in person (`createSupabaseServerClient`) or as anon (`createSupabaseAnonClient`); anything that must bypass row-level security belongs in a `security definer` function with `set search_path = ''` and its own checks.
+- Change the database with a new file in `supabase/migrations/`; never edit one that has been applied. Then regenerate types: `npx supabase gen types typescript --project-id xdoofqcilrozsiwxmomw > src/integrations/supabase/types.ts`.
+- Deploys go to Vercel (`vercel.json`); Nitro writes `.vercel/output` during the Vercel build. Keep `bun.lock` in step with `package.json` (`bun install`), since Vercel installs with `--frozen-lockfile`.

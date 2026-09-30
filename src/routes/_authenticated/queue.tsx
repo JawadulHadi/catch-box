@@ -46,7 +46,7 @@ function QueuePage() {
       title="Things that need a quick look"
       subtitle="Each one is a scrape that got stuck. Open it, fill in what's missing, and approve it — newest first."
       actions={
-        <div className="rounded-lg border border-border bg-card px-4 py-3 text-sm">
+        <div className="glass rounded-lg border border-border bg-card px-4 py-3 text-sm">
           <span className="font-display text-xl font-semibold text-primary">{waiting}</span>{" "}
           <span className="text-muted-foreground">waiting</span>
         </div>
@@ -80,7 +80,7 @@ function QueuePage() {
               <Link
                 to="/fix/$id"
                 params={{ id: item.id }}
-                className="group block rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary/50 hover:bg-surface"
+                className="glass group block rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary/50 hover:bg-surface"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">

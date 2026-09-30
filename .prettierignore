@@ -6,3 +6,17 @@ pnpm-lock.yaml
 package-lock.json
 bun.lock
 routeTree.gen.ts
+
+# Agent skills installed with `npx skills add`; keep them byte-for-byte as published.
+.agents
+.claude
+skills
+skills-lock.json
+.aider-desk
+.augment
+.autohand
+.bob
+.codeartsdoer
+.codebuddy
+.codemaker
+data/skills

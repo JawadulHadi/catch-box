@@ -30,6 +30,34 @@ export { CatchboxMark } from "./components/catchbox-mark";
 export type { CatchboxMarkProps } from "./components/catchbox-mark";
 export { ThemeToggle } from "./components/theme-toggle";
 export type { ThemeToggleProps } from "./components/theme-toggle";
-export { useThemeStore, useThemeSync } from "./hooks/use-theme";
+export { ThemeScope } from "./components/theme-scope";
+export type { ThemeScopeProps } from "./components/theme-scope";
+export { ThemePreview } from "./components/theme-preview";
+export type { ThemePreviewProps } from "./components/theme-preview";
+export { ThemePicker } from "./components/theme-picker";
+export type { ThemePickerProps } from "./components/theme-picker";
+export { useThemeStore, useThemeSync, useThemeSelection } from "./hooks/use-theme";
 export type { Theme } from "./hooks/use-theme";
+export {
+  applyThemeToElement,
+  defaultThemeSelection,
+  findThemePreset,
+  isSameTheme,
+  readStoredTheme,
+  themeAccents,
+  themeAttributes,
+  themeInitScript,
+  themeModes,
+  themePresets,
+  themeStorageKeys,
+  themeSurfaces,
+  writeStoredTheme,
+} from "./lib/themes";
+export type {
+  ThemeAccent,
+  ThemeMode,
+  ThemePreset,
+  ThemeSelection,
+  ThemeSurface,
+} from "./lib/themes";
 export { cn } from "./lib/utils";

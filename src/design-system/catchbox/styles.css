@@ -109,7 +109,20 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-:root {
+/*
+ * Themes combine three choices on one element (see lib/themes.ts):
+ *   mode    — `.dark` (default) or `.light`
+ *   accent  — `data-accent="amber | blue | violet | magenta | graphite"`
+ *   surface — `data-surface="solid | glass"`
+ * Each mode block below defines every token, so any element can carry its own
+ * theme and its children follow it. Accent and surface layers only override the
+ * tokens they own, so they combine freely. Success, warning and destructive never
+ * change with the accent: an accent must never read as "approved" or "broken".
+ */
+
+:root,
+.dark {
+  color-scheme: dark;
   --radius: 0.75rem;
   --background: oklch(0.168 0.014 265);
   --foreground: oklch(0.965 0.006 265);
@@ -149,15 +162,20 @@
   --sidebar-accent-foreground: oklch(0.965 0.006 265);
   --sidebar-border: oklch(0.31 0.018 265);
   --sidebar-ring: oklch(0.81 0.158 76);
+  /* The catchlight: a beam falling from the top, a pool where it lands, a cool counter-light. */
+  --aurora-1: oklch(0.66 0.15 76 / 0.38);
+  --aurora-2: oklch(0.52 0.15 35 / 0.3);
+  --aurora-3: oklch(0.45 0.12 285 / 0.28);
+  /* Glass is off until `data-surface="glass"` turns it on. */
+  --glass-filter: none;
+  --glass-sheen: none;
+  --canvas: none;
 }
 
-.dark {
-  --background: oklch(0.168 0.014 265);
-  --foreground: oklch(0.965 0.006 265);
-}
-
-/* Light theme — warm paper with the same amber catch, deepened for contrast. */
+/* Light theme — warm paper with the same amber catch, deepened so every text color
+   (primary, success, warning, destructive) reaches 4.5:1 on white. */
 .light {
+  color-scheme: light;
   --background: oklch(0.985 0.006 85);
   --foreground: oklch(0.2 0.018 265);
   --card: oklch(1 0 0);
@@ -166,31 +184,216 @@
   --surface-foreground: oklch(0.2 0.018 265);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.2 0.018 265);
-  --primary: oklch(0.72 0.16 70);
-  --primary-foreground: oklch(0.18 0.03 70);
+  --primary: oklch(0.54 0.12 62);
+  --primary-foreground: oklch(0.99 0.004 70);
   --secondary: oklch(0.945 0.012 85);
   --secondary-foreground: oklch(0.2 0.018 265);
   --muted: oklch(0.945 0.012 85);
   --muted-foreground: oklch(0.47 0.02 265);
   --accent: oklch(0.94 0.06 80);
   --accent-foreground: oklch(0.42 0.1 65);
-  --destructive: oklch(0.56 0.21 25);
+  --destructive: oklch(0.53 0.2 25);
   --destructive-foreground: oklch(0.99 0 0);
-  --success: oklch(0.52 0.13 158);
+  --success: oklch(0.5 0.12 158);
   --success-foreground: oklch(0.99 0 0);
-  --warning: oklch(0.6 0.15 55);
+  --warning: oklch(0.54 0.13 55);
   --warning-foreground: oklch(0.99 0 0);
   --border: oklch(0.9 0.012 85);
   --input: oklch(0.88 0.012 85);
-  --ring: oklch(0.72 0.16 70);
+  --ring: oklch(0.54 0.12 62);
   --sidebar: oklch(0.965 0.01 85);
   --sidebar-foreground: oklch(0.2 0.018 265);
-  --sidebar-primary: oklch(0.72 0.16 70);
-  --sidebar-primary-foreground: oklch(0.18 0.03 70);
+  --sidebar-primary: oklch(0.54 0.12 62);
+  --sidebar-primary-foreground: oklch(0.99 0.004 70);
   --sidebar-accent: oklch(0.93 0.02 85);
   --sidebar-accent-foreground: oklch(0.2 0.018 265);
   --sidebar-border: oklch(0.9 0.012 85);
-  --sidebar-ring: oklch(0.72 0.16 70);
+  --sidebar-ring: oklch(0.54 0.12 62);
+  --aurora-1: oklch(0.88 0.12 80 / 0.75);
+  --aurora-2: oklch(0.86 0.09 40 / 0.6);
+  --aurora-3: oklch(0.88 0.06 285 / 0.55);
+  --glass-filter: none;
+  --glass-sheen: none;
+  --canvas: none;
+}
+
+/* Accents — amber is the base above; each accent overrides only its own tokens. */
+
+[data-accent="blue"] {
+  --primary: oklch(0.76 0.13 240);
+  --primary-foreground: oklch(0.2 0.04 245);
+  --accent: oklch(0.3 0.05 240);
+  --accent-foreground: oklch(0.86 0.07 235);
+  --ring: oklch(0.76 0.13 240);
+  --sidebar-primary: oklch(0.76 0.13 240);
+  --sidebar-primary-foreground: oklch(0.2 0.04 245);
+  --sidebar-ring: oklch(0.76 0.13 240);
+  --aurora-1: oklch(0.62 0.14 240 / 0.4);
+  --aurora-2: oklch(0.52 0.1 195 / 0.3);
+  --aurora-3: oklch(0.45 0.14 285 / 0.3);
+}
+
+[data-accent="violet"] {
+  --primary: oklch(0.74 0.14 292);
+  --primary-foreground: oklch(0.2 0.05 292);
+  --accent: oklch(0.3 0.06 292);
+  --accent-foreground: oklch(0.86 0.07 292);
+  --ring: oklch(0.74 0.14 292);
+  --sidebar-primary: oklch(0.74 0.14 292);
+  --sidebar-primary-foreground: oklch(0.2 0.05 292);
+  --sidebar-ring: oklch(0.74 0.14 292);
+  --aurora-1: oklch(0.6 0.17 292 / 0.4);
+  --aurora-2: oklch(0.5 0.14 250 / 0.3);
+  --aurora-3: oklch(0.5 0.16 340 / 0.26);
+}
+
+[data-accent="magenta"] {
+  --primary: oklch(0.75 0.16 345);
+  --primary-foreground: oklch(0.2 0.05 345);
+  --accent: oklch(0.3 0.06 345);
+  --accent-foreground: oklch(0.87 0.08 345);
+  --ring: oklch(0.75 0.16 345);
+  --sidebar-primary: oklch(0.75 0.16 345);
+  --sidebar-primary-foreground: oklch(0.2 0.05 345);
+  --sidebar-ring: oklch(0.75 0.16 345);
+  --aurora-1: oklch(0.62 0.18 345 / 0.38);
+  --aurora-2: oklch(0.5 0.16 300 / 0.3);
+  --aurora-3: oklch(0.6 0.12 55 / 0.24);
+}
+
+[data-accent="graphite"] {
+  --primary: oklch(0.93 0.008 265);
+  --primary-foreground: oklch(0.2 0.018 265);
+  --accent: oklch(0.3 0.012 265);
+  --accent-foreground: oklch(0.93 0.008 265);
+  --ring: oklch(0.93 0.008 265);
+  --sidebar-primary: oklch(0.93 0.008 265);
+  --sidebar-primary-foreground: oklch(0.2 0.018 265);
+  --sidebar-ring: oklch(0.93 0.008 265);
+  --aurora-1: oklch(0.7 0.01 265 / 0.22);
+  --aurora-2: oklch(0.5 0.03 240 / 0.26);
+  --aurora-3: oklch(0.45 0.03 300 / 0.2);
+}
+
+.light[data-accent="blue"] {
+  --primary: oklch(0.53 0.17 252);
+  --primary-foreground: oklch(0.985 0.005 250);
+  --accent: oklch(0.94 0.03 240);
+  --accent-foreground: oklch(0.44 0.15 254);
+  --ring: oklch(0.53 0.17 252);
+  --sidebar-primary: oklch(0.53 0.17 252);
+  --sidebar-primary-foreground: oklch(0.985 0.005 250);
+  --sidebar-ring: oklch(0.53 0.17 252);
+  --aurora-1: oklch(0.86 0.09 240 / 0.75);
+  --aurora-2: oklch(0.9 0.07 195 / 0.6);
+  --aurora-3: oklch(0.88 0.06 285 / 0.55);
+}
+
+.light[data-accent="violet"] {
+  --primary: oklch(0.52 0.2 292);
+  --primary-foreground: oklch(0.985 0.005 292);
+  --accent: oklch(0.94 0.03 292);
+  --accent-foreground: oklch(0.44 0.18 292);
+  --ring: oklch(0.52 0.2 292);
+  --sidebar-primary: oklch(0.52 0.2 292);
+  --sidebar-primary-foreground: oklch(0.985 0.005 292);
+  --sidebar-ring: oklch(0.52 0.2 292);
+  --aurora-1: oklch(0.85 0.1 292 / 0.72);
+  --aurora-2: oklch(0.88 0.07 250 / 0.6);
+  --aurora-3: oklch(0.9 0.07 345 / 0.55);
+}
+
+.light[data-accent="magenta"] {
+  --primary: oklch(0.54 0.2 350);
+  --primary-foreground: oklch(0.985 0.005 350);
+  --accent: oklch(0.95 0.03 345);
+  --accent-foreground: oklch(0.45 0.18 350);
+  --ring: oklch(0.54 0.2 350);
+  --sidebar-primary: oklch(0.54 0.2 350);
+  --sidebar-primary-foreground: oklch(0.985 0.005 350);
+  --sidebar-ring: oklch(0.54 0.2 350);
+  --aurora-1: oklch(0.86 0.11 345 / 0.7);
+  --aurora-2: oklch(0.88 0.08 300 / 0.55);
+  --aurora-3: oklch(0.92 0.07 60 / 0.6);
+}
+
+.light[data-accent="graphite"] {
+  --primary: oklch(0.27 0.02 265);
+  --primary-foreground: oklch(0.985 0.004 265);
+  --accent: oklch(0.93 0.008 265);
+  --accent-foreground: oklch(0.27 0.02 265);
+  --ring: oklch(0.27 0.02 265);
+  --sidebar-primary: oklch(0.27 0.02 265);
+  --sidebar-primary-foreground: oklch(0.985 0.004 265);
+  --sidebar-ring: oklch(0.27 0.02 265);
+  --aurora-1: oklch(0.9 0.008 265 / 0.8);
+  --aurora-2: oklch(0.88 0.02 240 / 0.5);
+  --aurora-3: oklch(0.9 0.02 300 / 0.45);
+}
+
+/*
+ * Glass — panels turn translucent and frost whatever sits behind them, over a
+ * catchlight canvas built from the accent's aurora colors. Pair `bg-card`,
+ * `bg-sidebar` or `bg-popover` with the `glass` utility; `Card` already does.
+ */
+
+[data-surface="glass"] {
+  --card: oklch(0.24 0.018 265 / 0.58);
+  --popover: oklch(0.22 0.018 265 / 0.86);
+  --surface: oklch(0.3 0.02 265 / 0.42);
+  --sidebar: oklch(0.2 0.016 265 / 0.46);
+  --muted: oklch(0.32 0.02 265 / 0.5);
+  --secondary: oklch(0.32 0.02 265 / 0.6);
+  --border: oklch(0.98 0.005 265 / 0.1);
+  --input: oklch(0.98 0.005 265 / 0.16);
+  --sidebar-border: oklch(0.98 0.005 265 / 0.08);
+  --sidebar-accent: oklch(0.98 0.005 265 / 0.1);
+  --glass-filter: blur(22px) saturate(150%);
+  --glass-sheen: linear-gradient(180deg, oklch(1 0 0 / 0.07), oklch(1 0 0 / 0) 42%);
+  --canvas:
+    radial-gradient(26% 80% at 20% -8%, var(--aurora-1), transparent),
+    radial-gradient(85% 34% at 55% 108%, var(--aurora-2), transparent),
+    radial-gradient(38% 45% at 102% 16%, var(--aurora-3), transparent);
+}
+
+.light[data-surface="glass"] {
+  --card: oklch(1 0 0 / 0.58);
+  --popover: oklch(1 0 0 / 0.88);
+  --surface: oklch(1 0 0 / 0.42);
+  --sidebar: oklch(1 0 0 / 0.46);
+  --muted: oklch(0.95 0.01 85 / 0.6);
+  --secondary: oklch(0.95 0.01 85 / 0.7);
+  --border: oklch(0.2 0.018 265 / 0.1);
+  --input: oklch(0.2 0.018 265 / 0.18);
+  --sidebar-border: oklch(0.2 0.018 265 / 0.08);
+  --sidebar-accent: oklch(0.2 0.018 265 / 0.06);
+  --glass-filter: blur(22px) saturate(170%);
+  --glass-sheen: linear-gradient(180deg, oklch(1 0 0 / 0.55), oklch(1 0 0 / 0) 45%);
+}
+
+/* People who ask for less transparency keep the catchlight but get solid panels. */
+@media (prefers-reduced-transparency: reduce) {
+  [data-surface="glass"] {
+    --card: oklch(0.215 0.016 265);
+    --popover: oklch(0.215 0.016 265);
+    --surface: oklch(0.243 0.018 265);
+    --sidebar: oklch(0.193 0.015 265);
+    --muted: oklch(0.27 0.018 265);
+    --secondary: oklch(0.27 0.018 265);
+    --glass-filter: none;
+    --glass-sheen: none;
+  }
+
+  .light[data-surface="glass"] {
+    --card: oklch(1 0 0);
+    --popover: oklch(1 0 0);
+    --surface: oklch(0.965 0.01 85);
+    --sidebar: oklch(0.965 0.01 85);
+    --muted: oklch(0.945 0.012 85);
+    --secondary: oklch(0.945 0.012 85);
+    --glass-filter: none;
+    --glass-sheen: none;
+  }
 }
 
 @layer base {
@@ -205,6 +408,16 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* The page-wide catchlight. `none` in solid themes, so nothing paints. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: var(--canvas);
+  }
+
   h1,
   h2,
   h3,
@@ -216,4 +429,17 @@
 
 @utility text-balance {
   text-wrap: balance;
+}
+
+/* Frosts a translucent panel in glass themes; does nothing in solid ones. */
+@utility glass {
+  -webkit-backdrop-filter: var(--glass-filter);
+  backdrop-filter: var(--glass-filter);
+  background-image: var(--glass-sheen);
+}
+
+/* The theme's page background, catchlight included. For scoped previews and full-bleed areas. */
+@utility bg-canvas {
+  background-color: var(--background);
+  background-image: var(--canvas);
 }
