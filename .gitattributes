@@ -1,0 +1,2 @@
+# Keep LF line endings in every checkout, Windows included, so Prettier (LF) and git agree.
+* text=auto eol=lf

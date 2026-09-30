@@ -36,12 +36,14 @@ Supabase's security advisor flags that anon and signed-in people can run these f
 
 ## Changing the schema
 
-1. Add a new file to `supabase/migrations/`, named with a timestamp. Never edit a migration that has been applied.
-2. Apply it: `npx supabase db push` (or through the Supabase dashboard's SQL editor).
-3. Regenerate the types:
+1. Once per clone, link the folder to the project: `npx supabase link --project-ref xdoofqcilrozsiwxmomw`. The link lives in the git-ignored `supabase/.temp`, so a fresh clone needs it again.
+2. Create the file with `npx supabase migration new <name>`, so it gets a proper timestamp. Never edit a migration that has been applied.
+3. Apply it: `npx supabase db push`.
+   - If you apply SQL another way (the dashboard, or an AI tool using Supabase MCP), Supabase records its own timestamp. Rename the file to match, or `db push` will try to run it again. `npx supabase migration list` shows local and remote side by side.
+4. Regenerate the types:
 
    ```bash
    npx supabase gen types typescript --project-id xdoofqcilrozsiwxmomw > src/integrations/supabase/types.ts
    ```
 
-4. Grant only what the app needs. New Supabase projects give `anon` and `authenticated` every privilege on new tables by default, so revoke first and grant back explicitly (see `20260930120100_tighten_grants.sql`).
+5. Grant only what the app needs. New Supabase projects give `anon` and `authenticated` every privilege on new tables by default, so revoke first and grant back explicitly (see `20260930142021_tighten_grants.sql`).

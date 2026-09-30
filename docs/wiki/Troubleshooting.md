@@ -2,6 +2,10 @@
 
 ## Setup
 
+**`npx supabase db push` says "Cannot find project ref. Have you run supabase link?"** The folder isn't linked to the Supabase project yet (the link isn't stored in git). Run `npx supabase link --project-ref xdoofqcilrozsiwxmomw` once, then push again.
+
+**`db push` tries to re-run a migration that's already applied.** The file's timestamp doesn't match the version the database recorded. Compare with `npx supabase migration list` and rename the file to the recorded version.
+
 **`node use 24` says "Cannot find module".** `node` runs files; switching versions is `nvm use 24`. Install first with `nvm install 24`.
 
 **Lots of `EBADENGINE` warnings on install.** You're on Node 20. Catchbox needs Node 22.19 or later; use Node 24.

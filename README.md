@@ -140,11 +140,16 @@ The code is live: on Vercel it signs in to AI Gateway with the deployment's own 
 
 ## Database
 
-The schema lives in `supabase/migrations/` and is already applied to the project. To change it, add a new migration file, apply it (`npx supabase db push`), and regenerate the types:
+The schema lives in `supabase/migrations/` and is already applied to the project. Link the folder to the project once per clone (the link is stored in the git-ignored `supabase/.temp`), then create, apply and type each change:
 
 ```bash
+npx supabase link --project-ref xdoofqcilrozsiwxmomw   # once per clone
+npx supabase migration new add_something              # creates a correctly named file
+npx supabase db push                                   # applies anything not yet applied
 npx supabase gen types typescript --project-id xdoofqcilrozsiwxmomw > src/integrations/supabase/types.ts
 ```
+
+`npx supabase migration list` shows local and remote side by side; each file's timestamp must match the version the database recorded.
 
 ## Deploying
 
