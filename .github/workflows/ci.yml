@@ -27,5 +27,12 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bun run lint
       - run: bun run typecheck
-      - run: bunx prettier --check .
+      - name: Check formatting
+        # On failure, show exactly what Prettier would change.
+        run: |
+          if ! bunx prettier --check .; then
+            bunx prettier --write . > /dev/null
+            git --no-pager diff
+            exit 1
+          fi
       - run: bun run build
